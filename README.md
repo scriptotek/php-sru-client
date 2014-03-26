@@ -1,9 +1,11 @@
 ## php-sru-client
 
-Simple PHP Search/Retrieve via URL (SRU) class using [Guzzle](http://guzzlephp.org/)
-and returns [QuiteSimpleXMLElement](//github.com/danmichaelo/quitesimplexmlelement) objects.
+A simple PHP class for making Search/Retrieve via URL (SRU) requests,using the 
+[Guzzle HTTP client](http://guzzlephp.org/)
+and returning 
+[QuiteSimpleXMLElement](//github.com/danmichaelo/quitesimplexmlelement) instances.
 
-If you prefer a simple text response instead of a QuiteSimpleXmlElement object, you might try 
+If you prefer a simple text response, you might have a look at
 the [php-sru-search](https://github.com/Zeitschriftendatenbank/php-sru-search) package.
 
 ### Install using Composer
