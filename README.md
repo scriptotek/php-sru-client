@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/scriptotek/php-sru-client.png?branch=master)](https://travis-ci.org/scriptotek/php-sru-client)
+[![Coverage Status](https://coveralls.io/repos/scriptotek/php-sru-client/badge.png?branch=master)](https://coveralls.io/r/scriptotek/php-sru-client?branch=master)
+
 ## php-sru-client
 
 A simple PHP class for making Search/Retrieve via URL (SRU) requests,using the 
