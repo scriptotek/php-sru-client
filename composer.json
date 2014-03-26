@@ -1,0 +1,29 @@
+{
+    "name": "scriptotek/sru-client",
+    "type": "library",
+    "description": "Simple class for making Search/Retrieve via URL requests",
+    "homepage": "http://github.com/scriptotek/sru-client",
+    "keywords": ["sru"],
+    "require": {
+        "danmichaelo/quitesimplexmlelement": "dev-master",
+        "guzzle/guzzle": "3.8.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.0.*",
+        "satooshi/php-coveralls": "dev-master",
+        "mockery/mockery": "dev-master"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dan Michael O. Heggø",
+            "email": "danmichaelo@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Scriptotek\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
