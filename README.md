@@ -3,7 +3,7 @@
 
 ## php-sru-client
 
-A simple PHP class for making Search/Retrieve via URL (SRU) requests,using the 
+A simple PHP class for making [Search/Retrieve via URL](http://www.loc.gov/standards/sru/) (SRU) requests,using the 
 [Guzzle HTTP client](http://guzzlephp.org/)
 and returning 
 [QuiteSimpleXMLElement](//github.com/danmichaelo/quitesimplexmlelement) instances.
