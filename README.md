@@ -41,4 +41,10 @@ $client = new SruClient($url, array(
 
 $response = $client->search('dc.title="Hello world"');
 
+### To generate documentation
+
+    wget http://phpdoc.org/phpDocumentor.phar
+    mkdir docs
+    php phpDocumentor.phar
+
 ```

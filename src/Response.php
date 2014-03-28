@@ -2,11 +2,18 @@
  
 use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
 
+/**
+ * SRU response, containing a list of records or some error
+ */
 class Response {
 
+    /** @var Record[] */
     public $records;
+
+    /** @var string */
     public $error;
 
+    /** @var string */
     protected $rawResponse;
 
     /**
@@ -33,10 +40,13 @@ class Response {
             $this->records[] = $record;
         }
 
-        //doc->xpath('/srw:searchRetrieveResponse/
-
     }
 
+    /**
+     * Return the raw xml response
+     *
+     * @return string
+     */
     public function asXml()
     {
         return $this->rawResponse;

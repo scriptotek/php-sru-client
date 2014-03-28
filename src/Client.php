@@ -1,35 +1,46 @@
 <?php namespace Scriptotek\Sru;
  
-use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
 use \Guzzle\Http\Client as HttpClient;
 
+/**
+ * SRU client
+ */
 class Client {
 
+    /** @var HttpClient */
     protected $httpClient;
+
+    /** @var string SRU service base URL */
     protected $url;
+
+    /** @var string Requested schema for the returned records */
     protected $schema;
-    protected $namespaces;
+
+    /** @var string SRU protocol version */
     protected $version;
+
+    /** @var string Some user agent string to identify our client */
     protected $userAgent;
 
     /**
-     * Proxy: Either a string or an array:
-     * - '127.0.0.1:3128' 
-     * - array( '127.0.0.1:3128', 'my_username', 'my_password' )
+     * @var string|string[] Proxy configuration details.
+     *
+     * Either a string 'host:port' or an 
+     * array('host:port', 'username', 'password').
      */
     protected $proxy;
 
     /**
-     * array(username, password)
+     * @var string[] Array containing username and password
      */
     protected $credentials;
 
 	/**
 	 * Create a new client
 	 *
-	 * @param string $url
+	 * @param string $url Base URL to the SRU service
 	 * @param array $options Associative array of options
-	 * @param Guzzle\Http\Client $httpClient
+	 * @param HttpClient $httpClient
 	 */
     public function __construct($url, $options = null, $httpClient = null)
     {
@@ -69,9 +80,9 @@ class Client {
     /**
      * Construct the URL for a CQL query
      *
-     * @param string $cql
+     * @param string $cql The CQL query
      * @param int $start Start value in result set (optional)
-     * @param count $count Number of records to request (optional)
+     * @param int $count Number of records to request (optional)
      * @return string
      */
     public function urlTo($cql, $start = 1, $count = 10)
@@ -98,8 +109,8 @@ class Client {
      * 
      * @param string $cql
      * @param int $start Start value in result set (optional)
-     * @param count $count Number of records to request (optional)
-     * @return QuiteSimpleXMLElement
+     * @param int $count Number of records to request (optional)
+     * @return Response
      */
     public function search($cql, $start = 1, $count = 10) {
 
