@@ -25,5 +25,10 @@
             "Scriptotek\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Scriptotek\\Tests\\": "tests/"
+        }
+    },
     "minimum-stability": "dev"
 }

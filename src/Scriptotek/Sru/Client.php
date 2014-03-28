@@ -1,9 +1,9 @@
-<?php namespace Scriptotek;
+<?php namespace Scriptotek\Sru;
  
 use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
 use \Guzzle\Http\Client as HttpClient;
 
-class SRUClient {
+class Client {
 
     protected $httpClient;
     protected $url;
@@ -25,7 +25,7 @@ class SRUClient {
     protected $credentials;
 
 	/**
-	 * Create a new client object
+	 * Create a new client
 	 *
 	 * @param string $url
 	 * @param array $options Associative array of options
@@ -123,14 +123,7 @@ class SRUClient {
         $res = $this->httpClient->get($url, $options)->send();
         $body = $res->getBody(true);
 
-        try {
-            $xml = new QuiteSimpleXMLElement($body);
-        } catch (\Exception $e) {
-            throw new \Exception('Invalid response received from SRU service');
-        }
-
-        $xml->registerXPathNamespaces($this->namespaces);
-        return $xml;
+        return new Response($body, $this->namespaces);
 
     }
 
