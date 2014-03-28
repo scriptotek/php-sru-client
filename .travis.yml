@@ -7,7 +7,8 @@ php:
 
 before_script: 
  - echo 'date.timezone = "UTC"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
- - composer install --dev -o -n
+ - curl -sS https://getcomposer.org/installer | php
+ - php composer.phar install --dev -o -n
  - vendor/bin/phpunit --version
  - mkdir -p build/logs
 
