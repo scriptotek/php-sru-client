@@ -1,4 +1,4 @@
-<?php namespace Scriptotek\Tests;
+<?php namespace Scriptotek\Sru;
 
 use \Guzzle\Http\Message\Response as HttpResponse;
 use \Mockery as m;

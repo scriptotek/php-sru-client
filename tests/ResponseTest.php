@@ -1,14 +1,13 @@
-<?php namespace Scriptotek\Tests;
+<?php namespace Scriptotek\Sru;
 
 use \Guzzle\Http\Message\Response as HttpResponse;
 use \Mockery as m;
-use \Scriptotek\Sru\Response as SruResponse;
 
 class ResponseTest extends TestCase {
 
     public function testParse()
     {
-        $res = new SruResponse('<?xml version="1.0" encoding="UTF-8" ?>
+        $res = new Response('<?xml version="1.0" encoding="UTF-8" ?>
           <srw:searchRetrieveResponse 
             xmlns:srw="http://www.loc.gov/zing/srw/" 
             xmlns:xcql="http://www.loc.gov/zing/cql/xcql/"

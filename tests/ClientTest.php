@@ -1,8 +1,7 @@
-<?php namespace Scriptotek\Tests;
+<?php namespace Scriptotek\Sru;
 
 use \Guzzle\Http\Message\Response as HttpResponse;
 use \Mockery as m;
-use \Scriptotek\Sru\Client as SruClient;
 
 class ClientTest extends TestCase {
 
@@ -14,14 +13,14 @@ class ClientTest extends TestCase {
 
     public function testUrlTo()
     {
-        $sru1 = new SruClient($this->url);
+        $sru1 = new Client($this->url);
         $expectedUrl1 = $this->url . '?version=1.1&operation=searchRetrieve&recordSchema=marcxml&maximumRecords=10&query=isbn%3D123';
         $expectedUrl2 = $this->url . '?version=1.1&operation=searchRetrieve&recordSchema=marcxml&maximumRecords=50&query=isbn%3D123&startRecord=2';
 
-        $sru3 = new SruClient($this->url, array('schema' => 'CUSTOMSCHEMA'));
+        $sru3 = new Client($this->url, array('schema' => 'CUSTOMSCHEMA'));
         $expectedUrl3 = $this->url . '?version=1.1&operation=searchRetrieve&recordSchema=CUSTOMSCHEMA&maximumRecords=10&query=isbn%3D123';
 
-        $sru4 = new SruClient($this->url, array('version' => '0.9'));
+        $sru4 = new Client($this->url, array('version' => '0.9'));
         $expectedUrl4 = $this->url . '?version=0.9&operation=searchRetrieve&recordSchema=marcxml&maximumRecords=10&query=isbn%3D123';
 
         $this->assertEquals($expectedUrl1, $sru1->urlTo('isbn=123'));
@@ -33,7 +32,7 @@ class ClientTest extends TestCase {
     public function testSearch()
     {
         $http = $this->basicHttpMock($this->simple_response); 
-        $sru = new SruClient($this->url, null, $http);
+        $sru = new Client($this->url, null, $http);
 
         $this->assertXmlStringEqualsXmlString(
             $this->simple_response,
@@ -59,7 +58,7 @@ class ClientTest extends TestCase {
         $options = array(
             'credentials' => $credentials
         );
-        $sru = new SruClient($this->url, $options, $http);
+        $sru = new Client($this->url, $options, $http);
 
         $sru->search('test');
     }
