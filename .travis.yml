@@ -8,9 +8,10 @@ php:
 before_script: 
  - echo 'date.timezone = "UTC"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
  - composer install --dev -o -n
+ - vendor/bin/phpunit --version
+ - mkdir -p build/logs
 
 script: 
- - mkdir -p build/logs
  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
 after_script:

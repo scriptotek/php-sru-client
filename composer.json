@@ -21,8 +21,8 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "Scriptotek\\": "src/"
+        "psr-4": {
+            "Scriptotek\\Sru\\": "src/"
         }
     },
     "autoload-dev": {
