@@ -63,5 +63,97 @@ class ClientTest extends TestCase {
         $sru->search('test');
     }
 
+    public function testNext()
+    {
+        $cql = 'dc.title="Joda jada isjda"';
+
+        $request = m::mock();
+        $request->shouldReceive('send')
+            ->once()
+            ->andReturn(new HttpResponse(200, null, '<?xml version="1.0" encoding="UTF-8" ?>
+              <srw:searchRetrieveResponse 
+                xmlns:srw="http://www.loc.gov/zing/srw/" 
+                xmlns:xcql="http://www.loc.gov/zing/cql/xcql/"
+              >
+                <srw:version>1.1</srw:version>
+                <srw:numberOfRecords>3</srw:numberOfRecords>
+                <srw:records>
+                  <srw:record>
+                    <srw:recordSchema>marcxchange</srw:recordSchema>
+                    <srw:recordPacking>xml</srw:recordPacking>
+                    <srw:recordPosition>1</srw:recordPosition>
+                    <srw:recordData>Record 1</srw:recordData>
+                  </srw:record>
+                  <srw:record>
+                    <srw:recordSchema>marcxchange</srw:recordSchema>
+                    <srw:recordPacking>xml</srw:recordPacking>
+                    <srw:recordPosition>2</srw:recordPosition>
+                    <srw:recordData>Record 2</srw:recordData>
+                  </srw:record>
+                </srw:records>
+                <srw:nextRecordPosition>3</srw:nextRecordPosition>
+                <srw:echoedSearchRetrieveRequest>
+                  <srw:operation>searchRetrieve</srw:operation>
+                  <srw:version>1.1</srw:version>
+                  <srw:query>' . $cql . '</srw:query>
+                  <srw:startRecord>1</srw:startRecord>
+                  <srw:maximumRecords>2</srw:maximumRecords>
+                  <srw:recordSchema>marcxchange</srw:recordSchema>
+                </srw:echoedSearchRetrieveRequest>
+                <srw:extraResponseData>
+                  <responseDate>2014-03-28T12:09:50Z</responseDate>
+                </srw:extraResponseData>
+              </srw:searchRetrieveResponse>
+            '));
+
+        $http = m::mock();
+        $http->shouldReceive('get')
+            ->once()
+            ->andReturn($request);
+
+        $sru = new Client($this->url, null, $http);
+        $response = $sru->search($cql);
+        $this->assertCount(2, $response->records);
+
+        $request->shouldReceive('send')
+            ->once()
+            ->andReturn(new HttpResponse(200, null, '<?xml version="1.0" encoding="UTF-8" ?>
+              <srw:searchRetrieveResponse 
+                xmlns:srw="http://www.loc.gov/zing/srw/" 
+                xmlns:xcql="http://www.loc.gov/zing/cql/xcql/"
+              >
+                <srw:version>1.1</srw:version>
+                <srw:numberOfRecords>3</srw:numberOfRecords>
+                <srw:records>
+                  <srw:record>
+                    <srw:recordSchema>marcxchange</srw:recordSchema>
+                    <srw:recordPacking>xml</srw:recordPacking>
+                    <srw:recordPosition>3</srw:recordPosition>
+                    <srw:recordData>Record 3</srw:recordData>
+                  </srw:record>
+                </srw:records>
+                <srw:echoedSearchRetrieveRequest>
+                  <srw:operation>searchRetrieve</srw:operation>
+                  <srw:version>1.1</srw:version>
+                  <srw:query>' . $cql . '</srw:query>
+                  <srw:startRecord>3</srw:startRecord>
+                  <srw:maximumRecords>2</srw:maximumRecords>
+                  <srw:recordSchema>marcxchange</srw:recordSchema>
+                </srw:echoedSearchRetrieveRequest>
+                <srw:extraResponseData>
+                  <responseDate>2014-03-28T12:09:50Z</responseDate>
+                </srw:extraResponseData>
+              </srw:searchRetrieveResponse>
+            '));
+
+        $response = $response->next();
+        $this->assertCount(1, $response->records);
+
+        $response = $response->next();
+        $this->assertNull($response);
+
+
+    }
+
 }
 

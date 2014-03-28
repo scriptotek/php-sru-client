@@ -52,14 +52,6 @@ class Client {
             ? $options['schema']
             : 'marcxml';
 
-        $this->namespaces = isset($options['namespaces'])
-            ? $options['namespaces']
-            : array(
-                'srw' => 'http://www.loc.gov/zing/srw/',
-                'marc' => 'http://www.loc.gov/MARC21/slim',
-                'd' => 'http://www.loc.gov/zing/srw/diagnostic/'
-            );
-
         $this->version = isset($options['version'])
             ? $options['version']
             : '1.1';
@@ -134,7 +126,7 @@ class Client {
         $res = $this->httpClient->get($url, $options)->send();
         $body = $res->getBody(true);
 
-        return new Response($body, $this->namespaces);
+        return new Response($body, $this);
 
     }
 

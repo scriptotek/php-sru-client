@@ -39,7 +39,13 @@ $client = new SruClient($url, array(
     'user-agent' => 'OpenKat/0.1'
 );
 
+$records = array();
 $response = $client->search('dc.title="Hello world"');
+while ($response && count($response->records) != 0) {
+	$records[] = array_merge($records, $response->records);
+	$response = $response->next();
+}
+```
 
 ### To generate documentation
 
