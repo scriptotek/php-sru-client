@@ -14,14 +14,14 @@ class ClientTest extends TestCase {
     public function testUrlTo()
     {
         $sru1 = new Client($this->url);
-        $expectedUrl1 = $this->url . '?version=1.1&operation=searchRetrieve&recordSchema=marcxml&maximumRecords=10&query=isbn%3D123';
-        $expectedUrl2 = $this->url . '?version=1.1&operation=searchRetrieve&recordSchema=marcxml&maximumRecords=50&query=isbn%3D123&startRecord=2';
+        $expectedUrl1 = $this->url . '?operation=searchRetrieve&version=1.1&recordSchema=marcxml&maximumRecords=10&query=isbn%3D123';
+        $expectedUrl2 = $this->url . '?operation=searchRetrieve&version=1.1&recordSchema=marcxml&maximumRecords=50&query=isbn%3D123&startRecord=2';
 
         $sru3 = new Client($this->url, array('schema' => 'CUSTOMSCHEMA'));
-        $expectedUrl3 = $this->url . '?version=1.1&operation=searchRetrieve&recordSchema=CUSTOMSCHEMA&maximumRecords=10&query=isbn%3D123';
+        $expectedUrl3 = $this->url . '?operation=searchRetrieve&version=1.1&recordSchema=CUSTOMSCHEMA&maximumRecords=10&query=isbn%3D123';
 
         $sru4 = new Client($this->url, array('version' => '0.9'));
-        $expectedUrl4 = $this->url . '?version=0.9&operation=searchRetrieve&recordSchema=marcxml&maximumRecords=10&query=isbn%3D123';
+        $expectedUrl4 = $this->url . '?operation=searchRetrieve&version=0.9&recordSchema=marcxml&maximumRecords=10&query=isbn%3D123';
 
         $this->assertEquals($expectedUrl1, $sru1->urlTo('isbn=123'));
         $this->assertEquals($expectedUrl2, $sru1->urlTo('isbn=123', 2, 50));

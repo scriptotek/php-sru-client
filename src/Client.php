@@ -35,13 +35,13 @@ class Client {
      */
     protected $credentials;
 
-	/**
-	 * Create a new client
-	 *
-	 * @param string $url Base URL to the SRU service
-	 * @param array $options Associative array of options
-	 * @param HttpClient $httpClient
-	 */
+    /**
+     * Create a new client
+     *
+     * @param string $url Base URL to the SRU service
+     * @param array $options Associative array of options
+     * @param HttpClient $httpClient
+     */
     public function __construct($url, $options = null, $httpClient = null)
     {
         $this->url = $url;
@@ -80,8 +80,8 @@ class Client {
     public function urlTo($cql, $start = 1, $count = 10)
     {
         $qs = array(
-            'version' => $this->version,
             'operation' => 'searchRetrieve',
+            'version' => $this->version,
             'recordSchema' => $this->schema,
             'maximumRecords' => $count,
             'query' => $cql
@@ -97,16 +97,12 @@ class Client {
     }
 
     /**
-     * Perform a searchRetrieveResponse request
+     * Get HTTP client configuration options (authentication, proxy, headers)
      * 
-     * @param string $cql
-     * @param int $start Start value in result set (optional)
-     * @param int $count Number of records to request (optional)
-     * @return Response
+     * @return array
      */
-    public function search($cql, $start = 1, $count = 10) {
-
-        $url = $this->urlTo($cql, $start, $count);
+    protected function getHttpOptions()
+    {
         $headers = array(
             'Accept' => 'application/xml'
         );
@@ -122,11 +118,46 @@ class Client {
         if ($this->proxy) {
             $options['proxy'] = $this->proxy;
         }
+        return $options;
+    }
+
+    /**
+     * Perform a searchRetrieve request
+     * 
+     * @param string $cql
+     * @param int $start Start value in result set (optional)
+     * @param int $count Number of records to request (optional)
+     * @return Response
+     */
+    public function search($cql, $start = 1, $count = 10) {
+
+        $url = $this->urlTo($cql, $start, $count);
+        $options = $this->getHttpOptions();
 
         $res = $this->httpClient->get($url, $options)->send();
         $body = $res->getBody(true);
 
         return new Response($body, $this);
+    }
+
+    /**
+     * Perform an explain request
+     * 
+     * @return ExplainResponse
+     */
+    public function explain() {
+
+        $url = $this->url . '?' . http_build_query(array(
+            'operation' => 'explain',
+            'version' => $this->version,
+            'recordSchema' => $this->schema
+        ));
+        $options = $this->getHttpOptions();
+
+        $res = $this->httpClient->get($url, $options)->send();
+        $body = $res->getBody(true);
+
+        return new ExplainResponse($body, $this);
 
     }
 
