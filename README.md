@@ -49,8 +49,6 @@ while ($response && count($response->records) != 0) {
 
 ### To generate documentation
 
-    wget http://phpdoc.org/phpDocumentor.phar
-    mkdir docs
-    php phpDocumentor.phar
+    php vendor/bin/sami.php update sami.config.php -v
 
 ```
