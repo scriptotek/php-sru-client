@@ -60,6 +60,11 @@ class Response {
             $this->records[] = new Record($record);
         }
 
+        $e = $doc->first('/srw:searchRetrieveResponse/srw:diagnostics');
+        if ($e) {
+            $this->error = $e->text('d:diagnostic/d:messsage') . ' : ' . $e->text('d:diagnostic/d:details'); 
+        }
+
         $this->client = $client;
 
         // The server may echo the request back to the client along with the response
