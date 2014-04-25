@@ -37,7 +37,7 @@ $client = new SruClient($url, array(
     'schema' => 'marcxml',
     'version' => '1.1',
     'user-agent' => 'OpenKat/0.1'
-);
+));
 
 $records = array();
 $response = $client->search('dc.title="Hello world"');
