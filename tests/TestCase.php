@@ -44,7 +44,7 @@ class TestCase extends \PHPUnit_Framework_TestCase {
      * @param  mixed   $default
      * @return mixed
      */
-    function array_get($array, $key, $default = null)
+    private function array_get($array, $key, $default = null)
     {
         if (is_null($key)) return $array;
 
@@ -79,11 +79,12 @@ class TestCase extends \PHPUnit_Framework_TestCase {
 
         $endRecord = $startRecord + min($maxRecords - 1, $numberOfRecords - $startRecord);
 
-        $records = implode('', array_map(function($n) {
+        $recordTpl = $this->recordTpl;
+        $records = implode('', array_map(function($n) use ($recordTpl) {
             return str_replace(
                 array('{{position}}', '{{data}}'),
                 array($n, 'RecordData #' . $n),
-                $this->recordTpl
+                $recordTpl
             );
         }, range($startRecord, $endRecord)));
 
