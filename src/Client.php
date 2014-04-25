@@ -101,7 +101,7 @@ class Client {
      * 
      * @return array
      */
-    protected function getHttpOptions()
+    public function getHttpOptions()
     {
         $headers = array(
             'Accept' => 'application/xml'
@@ -123,7 +123,7 @@ class Client {
 
     /**
      * Perform a searchRetrieve request
-     * 
+     *
      * @param string $cql
      * @param int $start Start value in result set (optional)
      * @param int $count Number of records to request (optional)
@@ -141,8 +141,19 @@ class Client {
     }
 
     /**
+     * Perform a searchRetrieve request and return an iterator over the records
+     *
+     * @param string $cql
+     * @return Records
+     */
+    public function records($cql)
+    {
+        return new Records($cql, $this);
+    }
+
+    /**
      * Perform an explain request
-     * 
+     *
      * @return ExplainResponse
      */
     public function explain() {

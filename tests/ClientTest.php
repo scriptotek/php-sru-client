@@ -31,7 +31,7 @@ class ClientTest extends TestCase {
     
     public function testSearch()
     {
-        $http = $this->basicHttpMock($this->simple_response); 
+        $http = $this->httpMockSingleResponse($this->simple_response);
         $sru = new Client($this->url, null, $http);
 
         $this->assertXmlStringEqualsXmlString(
