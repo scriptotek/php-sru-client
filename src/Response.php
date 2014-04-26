@@ -22,9 +22,6 @@ class Response implements ResponseInterface {
     /** @var string SRU protocol version */
     public $version;
 
-    /** @var string The CQL query used to generate the response */
-    public $query;
-
     /**
      * Create a new response
      *
@@ -40,23 +37,17 @@ class Response implements ResponseInterface {
 
         $this->client = $client;
 
-        $doc->registerXPathNamespaces(array(
+        $this->response->registerXPathNamespaces(array(
             'srw' => 'http://www.loc.gov/zing/srw/',
             'd' => 'http://www.loc.gov/zing/srw/diagnostic/'
         ));
 
-        $this->version = $doc->text('/srw:searchRetrieveResponse/srw:version');
+        $this->version = $this->response->text('/srw:*/srw:version');
 
-        $e = $doc->first('/srw:searchRetrieveResponse/srw:diagnostics');
+        $e = $this->response->first('/srw:*/srw:diagnostics');
         if ($e) {
             $this->error = $e->text('d:diagnostic/d:message') . '. ' . $e->text('d:diagnostic/d:details'); 
         }
-
-        // The server may echo the request back to the client along with the response
-        $this->query = $doc->text('/srw:searchRetrieveResponse/srw:echoedSearchRetrieveRequest/srw:query') ?: null;
-
-        $this->response = $doc;
-
     }
 
     /**

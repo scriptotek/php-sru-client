@@ -16,6 +16,9 @@ class SearchRetrieveResponse extends Response implements ResponseInterface {
     /** @var int Position of next record in the result set, or null if no such record exist */
     public $nextRecordPosition;
 
+    /** @var string The CQL query used to generate the response */
+    public $query;
+
     /**
      * Create a new searchRetrieve response
      *
@@ -28,6 +31,9 @@ class SearchRetrieveResponse extends Response implements ResponseInterface {
 
         $this->numberOfRecords = (int) $this->response->text('/srw:searchRetrieveResponse/srw:numberOfRecords');
         $this->nextRecordPosition = (int) $this->response->text('/srw:searchRetrieveResponse/srw:nextRecordPosition') ?: null;
+
+        // The server may echo the request back to the client along with the response
+        $this->query = $this->response->text('/srw:searchRetrieveResponse/srw:echoedSearchRetrieveRequest/srw:query') ?: null;
 
         $this->records = array();
         foreach ($this->response->xpath('/srw:searchRetrieveResponse/srw:records/srw:record') as $record) {
