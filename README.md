@@ -1,5 +1,6 @@
-[![Build Status](https://travis-ci.org/scriptotek/php-sru-client.png?branch=master)](https://travis-ci.org/scriptotek/php-sru-client)
-[![Coverage Status](https://coveralls.io/repos/scriptotek/php-sru-client/badge.png?branch=master)](https://coveralls.io/r/scriptotek/php-sru-client?branch=master)
+
+[![Build Status](https://img.shields.io/travis/scriptotek/php-sru-client.svg)](https://travis-ci.org/scriptotek/php-sru-client)
+[![Coverage Status](https://img.shields.io/coveralls/scriptotek/php-sru-client.svg)](https://coveralls.io/r/scriptotek/php-sru-client?branch=master)
 
 ## php-sru-client
 
