@@ -39,6 +39,7 @@ class Response implements ResponseInterface {
 
         $this->response->registerXPathNamespaces(array(
             'srw' => 'http://www.loc.gov/zing/srw/',
+            'exp' => 'http://explain.z3950.org/dtd/2.0/',
             'd' => 'http://www.loc.gov/zing/srw/diagnostic/'
         ));
 

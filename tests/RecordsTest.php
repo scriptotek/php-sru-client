@@ -15,14 +15,19 @@ class RecordsTest extends TestCase {
 
 		$client = new Client($uri);
 		$records = new Records($cql, $client, $http);
+		$this->assertNull($records->getError());
 		$records->rewind();
+		$this->assertNull($records->getError());
 
 		$this->assertEquals(1, $records->key());
+		$this->assertTrue($records->valid());
 		$records->next();
 		$records->next();
 		$this->assertEquals(3, $records->key());
+		$this->assertTrue($records->valid());
 		$records->rewind();
 		$this->assertEquals(1, $records->key());
+		$this->assertTrue($records->valid());
 
 		$i = 0;
 		foreach ($records as $rec) {
