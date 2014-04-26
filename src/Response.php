@@ -62,7 +62,7 @@ class Response {
 
         $e = $doc->first('/srw:searchRetrieveResponse/srw:diagnostics');
         if ($e) {
-            $this->error = $e->text('d:diagnostic/d:messsage') . ' : ' . $e->text('d:diagnostic/d:details'); 
+            $this->error = $e->text('d:diagnostic/d:message') . '. ' . $e->text('d:diagnostic/d:details'); 
         }
 
         $this->client = $client;

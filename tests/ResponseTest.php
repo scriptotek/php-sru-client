@@ -96,4 +96,21 @@ class ResponseTest extends TestCase {
         $this->assertEquals('Record 1', $res->records[0]->data);
     }
 
+    public function testError()
+    {
+      $res = new Response('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
+          <srw:version>1.1</srw:version>
+          <srw:numberOfRecords>0</srw:numberOfRecords>
+          <srw:diagnostics xmlns="http://www.loc.gov/zing/srw/diagnostic/">
+            <diagnostic >
+              <uri>info:srw/diagnostic/1/66</uri>
+              <details>Invalid parameter: \'marcxml\' for service: \'biblio\'</details>
+              <message>Unknown schema for retrieval</message>
+            </diagnostic>
+          </srw:diagnostics>
+        </srw:searchRetrieveResponse>');
+
+      $this->assertEquals('Unknown schema for retrieval. Invalid parameter: \'marcxml\' for service: \'biblio\'', $res->error);
+    }
+
 }
