@@ -1,7 +1,7 @@
 {
     "name": "scriptotek/sru-client",
     "type": "library",
-    "description": "Simple class for making Search/Retrieve via URL requests",
+    "description": "Package for making Search/Retrieve via URL requests and parse the responses",
     "homepage": "http://github.com/scriptotek/sru-client",
     "keywords": ["sru"],
     "require": {
