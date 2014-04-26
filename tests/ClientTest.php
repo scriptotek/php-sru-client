@@ -60,7 +60,8 @@ class ClientTest extends TestCase {
         );
         $sru = new Client($this->url, $options, $http);
 
-        $sru->search('test');
+        $r = $sru->search('test');
+        $this->assertInstanceOf('Scriptotek\Sru\SearchRetrieveResponse', $r);
     }
 
     public function testNext()

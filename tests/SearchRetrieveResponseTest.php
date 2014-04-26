@@ -3,11 +3,11 @@
 use \Guzzle\Http\Message\Response as HttpResponse;
 use \Mockery as m;
 
-class ResponseTest extends TestCase {
+class SearchRetrieveResponseTest extends TestCase {
 
     public function testSingleRecordResult()
     {
-        $res = new Response('<?xml version="1.0" encoding="UTF-8" ?>
+        $res = new SearchRetrieveResponse('<?xml version="1.0" encoding="UTF-8" ?>
           <srw:searchRetrieveResponse 
             xmlns:srw="http://www.loc.gov/zing/srw/" 
             xmlns:xcql="http://www.loc.gov/zing/cql/xcql/"
@@ -49,7 +49,7 @@ class ResponseTest extends TestCase {
 
     public function testMultipleRecordsResult()
     {
-        $res = new Response('<?xml version="1.0" encoding="UTF-8" ?>
+        $res = new SearchRetrieveResponse('<?xml version="1.0" encoding="UTF-8" ?>
           <srw:searchRetrieveResponse 
             xmlns:srw="http://www.loc.gov/zing/srw/" 
             xmlns:xcql="http://www.loc.gov/zing/cql/xcql/"
@@ -98,7 +98,7 @@ class ResponseTest extends TestCase {
 
     public function testError()
     {
-      $res = new Response('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
+      $res = new SearchRetrieveResponse('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
           <srw:version>1.1</srw:version>
           <srw:numberOfRecords>0</srw:numberOfRecords>
           <srw:diagnostics xmlns="http://www.loc.gov/zing/srw/diagnostic/">

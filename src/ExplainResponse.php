@@ -3,12 +3,9 @@
 use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
 
 /**
- * SRU explain response
+ * Explain response
  */
-class ExplainResponse {
-
-    /** @var string Raw XML response */
-    protected $rawResponse;
+class ExplainResponse extends Response implements ResponseInterface {
 
     /**
      * Create a new explain response
@@ -18,29 +15,10 @@ class ExplainResponse {
      */
     public function __construct($text, &$client = null)
     {
-        $this->rawResponse = $text; 
-        try {
-            $doc = new QuiteSimpleXMLElement($text);
-        } catch (\Exception $e) {
-            throw new \Exception('Invalid XML received');
-        }
+        parent::__construct($text, $client);
 
-        $doc->registerXPathNamespaces(array(
-            'srw' => 'http://www.loc.gov/zing/srw/',
-            'd' => 'http://www.loc.gov/zing/srw/diagnostic/'
-        ));
+        // TODO
 
-        $this->client = $client;
-    }
-
-    /**
-     * Get the raw xml response
-     *
-     * @return string
-     */
-    public function asXml()
-    {
-        return $this->rawResponse;
     }
 
 }

@@ -68,7 +68,7 @@ class Records implements \Iterator {
 
 		$res = $this->httpClient->get($url, $options)->send();
 		$body = $res->getBody(true);
-		$this->lastResponse = new Response($body);
+		$this->lastResponse = new SearchRetrieveResponse($body);
 		$this->data = $this->lastResponse->records;
 
 		if (count($this->data) != 0 && $this->data[0]->position != $this->position) {

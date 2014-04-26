@@ -127,7 +127,7 @@ class Client {
      * @param string $cql
      * @param int $start Start value in result set (optional)
      * @param int $count Number of records to request (optional)
-     * @return Response
+     * @return SearchRetrieveResponse
      */
     public function search($cql, $start = 1, $count = 10) {
 
@@ -137,7 +137,7 @@ class Client {
         $res = $this->httpClient->get($url, $options)->send();
         $body = $res->getBody(true);
 
-        return new Response($body, $this);
+        return new SearchRetrieveResponse($body, $this);
     }
 
     /**
