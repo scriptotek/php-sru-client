@@ -30,7 +30,7 @@ and run `composer install` to get the latest version of the package.
 
 ```php
 require_once('vendor/autoload.php');
-use Scriptotek\SruClient;
+use Scriptotek\Sru\Client as SruClient;
 
 $url = 'http://sru.bibsys.no/search/biblioholdings';
 
@@ -40,11 +40,10 @@ $client = new SruClient($url, array(
     'user-agent' => 'OpenKat/0.1'
 ));
 
-$records = array();
-$response = $client->search('dc.title="Hello world"');
-while ($response && count($response->records) != 0) {
-	$records[] = array_merge($records, $response->records);
-	$response = $response->next();
+$records = $client->records('dc.title="Hello world"');
+foreach ($records as $record) {
+	echo "Got record " . $record->position . " of " . $records->numberOfRecords() . "\n";
+	// processRecord($record->data);
 }
 ```
 

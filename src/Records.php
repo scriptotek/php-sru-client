@@ -36,26 +36,36 @@ class Records implements \Iterator {
      *
      * @param string $cql Query
      * @param Client $client SRU client reference (optional)
-     * @param mixed $httpClient A http client
      * @param int $count Number of records to request per request
+     * @param mixed $httpClient A http client
      */
-	public function __construct($cql, Client $client, $httpClient = null, $count = 10) {
+	public function __construct($cql, Client $client, $count = 10, $httpClient = null) {
 		$this->position = 1;
 		$this->count = $count; // number of records per request
 		$this->cql = $cql;
 		$this->httpClient = $httpClient ?: new HttpClient;
 		$this->client = $client;
+		$this->fetchMore();
 	}
 
 	/**
      * Return error message from last reponse, if any
+     *
+     * @return string|null
      */
 	public function getError()
 	{
-		if (isset($this->lastResponse)) {
-			return $this->lastResponse->error;
-		}
-		return null;
+		return $this->lastResponse->error;
+	}
+
+	/**
+     * Return the number of records
+     *
+     * @return int|null
+     */
+	public function numberOfRecords()
+	{
+		return $this->lastResponse->numberOfRecords;
 	}
 
 	/**
@@ -79,14 +89,6 @@ class Records implements \Iterator {
 	}
 
 	/**
-     * Rewind the Iterator to the first element
-     */
-	function rewind() {
-		$this->position = 1;
-		$this->fetchMore();
-	}
-
-	/**
      * Return the current element
      *
      * @return mixed
@@ -105,6 +107,17 @@ class Records implements \Iterator {
 	}
 
 	/**
+     * Rewind the Iterator to the first element
+     */
+	function rewind() {
+		if ($this->position != 1) {
+			$this->position = 1;
+			$this->data = array();
+			$this->fetchMore();
+		}
+	}
+
+	/**
      * Move forward to next element
      */
 	function next() {
@@ -114,7 +127,7 @@ class Records implements \Iterator {
 		}
 		++$this->position;
 
-		if (isset($this->lastResponse) && $this->position > $this->lastResponse->numberOfRecords) {
+		if ($this->position > $this->numberOfRecords()) {
 			return null;
 		}
 
