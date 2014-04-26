@@ -45,6 +45,9 @@ the CQL query, and the second optional argument is the number of records to fetc
 
 ```php
 $records = $client->records('dc.title="Hello world"');
+if ($records->error) {
+	print 'ERROR: ' . $records->error . "\n";
+}
 foreach ($records as $record) {
 	echo "Got record " . $record->position . " of " . $records->numberOfRecords() . "\n";
 	// processRecord($record->data);

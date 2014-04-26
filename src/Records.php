@@ -53,9 +53,10 @@ class Records implements \Iterator {
      *
      * @return string|null
      */
-	public function getError()
-	{
-		return $this->lastResponse->error;
+	function __get($prop) {
+		if ($prop == 'error') {
+			return $this->lastResponse->error;
+		}
 	}
 
 	/**
