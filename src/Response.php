@@ -33,12 +33,10 @@ class Response implements ResponseInterface {
      */
     public function __construct($text, &$client = null)
     {
-        $this->rawResponse = $text; 
-        try {
-            $doc = new QuiteSimpleXMLElement($text);
-        } catch (\Exception $e) {
-            throw new \Exception('Invalid XML received');
-        }
+        $this->rawResponse = $text;
+
+        // Throws Danmichaelo\QuiteSimpleXMLElement\InvalidXMLException on invalid xml
+        $this->response = new QuiteSimpleXMLElement($text);
 
         $this->client = $client;
 
