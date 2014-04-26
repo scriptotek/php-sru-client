@@ -31,7 +31,7 @@ class ExplainResponse extends Response implements ResponseInterface {
 
         $this->indexes = array();
 
-        $explain = $this->response->first('/srw:explainResponse/srw:record/sru:recordData/exp:explain');
+        $explain = $this->response->first('/srw:explainResponse/srw:record/srw:recordData/exp:explain');
         if (!$explain) return;
 
         $serverInfo = $explain->first('exp:serverInfo');
