@@ -163,7 +163,6 @@ class Client {
         $url = $this->url . '?' . http_build_query(array(
             'operation' => 'explain',
             'version' => $this->version,
-            'recordSchema' => $this->schema
         ));
         $options = $this->getHttpOptions();
 
