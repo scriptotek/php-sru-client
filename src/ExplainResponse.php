@@ -29,7 +29,11 @@ class ExplainResponse extends Response implements ResponseInterface {
     {
         parent::__construct($text, $client);
 
+        $this->indexes = array();
+
         $explain = $this->response->first('/srw:explainResponse/srw:record/sru:recordData/exp:explain');
+        if (!$explain) return;
+
         $serverInfo = $explain->first('exp:serverInfo');
         $dbInfo = $explain->first('exp:databaseInfo');
         $indexInfo = $explain->first('exp:indexInfo');
@@ -41,7 +45,6 @@ class ExplainResponse extends Response implements ResponseInterface {
         $this->database->title = $dbInfo->text('exp:title');
         $this->database->description = $dbInfo->text('exp:description');
 
-        $this->indexes = array();
         foreach ($indexInfo->xpath('exp:index') as $index) {
             $ind = new \StdClass;
             $ind->scan = ($index->attr('scan') == 'true');

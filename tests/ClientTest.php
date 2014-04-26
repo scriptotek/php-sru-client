@@ -11,6 +11,10 @@ class ClientTest extends TestCase {
               <srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/" xmlns:xcql="http://www.loc.gov/zing/cql/xcql/">
               </srw:searchRetrieveResponse>';
 
+    protected $simple_explain_response = '<?xml version="1.0" encoding="UTF-8"?>
+            <sru:explainResponse xmlns:sru="http://www.loc.gov/zing/srw/">
+            </sru:explainResponse>';
+
     public function testUrlTo()
     {
         $sru1 = new Client($this->url);
@@ -154,6 +158,46 @@ class ClientTest extends TestCase {
         $this->assertNull($response);
 
 
+    }
+
+    public function testHttpOptions()
+    {
+        $sru1 = new Client($this->url, array(
+            'user-agent' => 'Blablabla/0.1',
+            'credentials' => array('myuser', 'mypass'),
+            'proxy' => 'proxyhost:80'
+        ));
+
+        $opts = $sru1->getHttpOptions();
+
+        $this->assertEquals('application/xml', $opts['headers']['Accept']);
+        $this->assertEquals('Blablabla/0.1', $opts['headers']['User-Agent']);
+        $this->assertEquals(array('myuser', 'mypass'), $opts['auth']);
+        $this->assertEquals('proxyhost:80', $opts['proxy']);
+    }
+
+    public function testRecords()
+    {
+        $http = $this->httpMockSingleResponse($this->makeDummyResponse(1));
+
+        $sru1 = new Client($this->url);
+        $r = $sru1->records('test', 1, $http);
+
+        $this->assertInstanceOf('Scriptotek\Sru\Records', $r);
+    }
+
+    public function testExplain()
+    {
+        $http = $this->httpMockSingleResponse($this->simple_explain_response);
+        $sru = new Client($this->url, null, $http);
+        $exp = $sru->explain();
+
+        $this->assertInstanceOf('Scriptotek\Sru\ExplainResponse', $exp);
+
+        $this->assertXmlStringEqualsXmlString(
+            $this->simple_explain_response,
+            $exp->asXml()
+        );
     }
 
 }

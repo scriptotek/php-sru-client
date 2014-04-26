@@ -145,11 +145,12 @@ class Client {
      *
      * @param string $cql
      * @param int $count Number of records to request per request
+     * @param mixed $httpClient A http client
      * @return Records
      */
-    public function records($cql, $count = 10)
+    public function records($cql, $count = 10, $httpClient = null)
     {
-        return new Records($cql, $this, $count);
+        return new Records($cql, $this, $count, $httpClient);
     }
 
     /**
