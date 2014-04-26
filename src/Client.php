@@ -144,11 +144,12 @@ class Client {
      * Perform a searchRetrieve request and return an iterator over the records
      *
      * @param string $cql
+     * @param int $count Number of records to request per request
      * @return Records
      */
-    public function records($cql)
+    public function records($cql, $count = 10)
     {
-        return new Records($cql, $this);
+        return new Records($cql, $this, $count);
     }
 
     /**

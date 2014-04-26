@@ -1,4 +1,3 @@
-
 [![Build Status](https://img.shields.io/travis/scriptotek/php-sru-client.svg)](https://travis-ci.org/scriptotek/php-sru-client)
 [![Coverage Status](https://img.shields.io/coveralls/scriptotek/php-sru-client.svg)](https://coveralls.io/r/scriptotek/php-sru-client?branch=master)
 
@@ -39,7 +38,12 @@ $client = new SruClient($url, array(
     'version' => '1.1',
     'user-agent' => 'OpenKat/0.1'
 ));
+```
 
+To iterate over all the results from a `searchRetrieve` query, use the [Records](//scriptotek.github.io/php-sru-client/api_docs/Scriptotek/Sru/Records.html) class returned from `Client::records()`. It abstracts away the process of actually making the requests. The first argument is
+the CQL query, and the second optional argument is the number of records to fetch for each request (defaults to 10).
+
+```php
 $records = $client->records('dc.title="Hello world"');
 foreach ($records as $record) {
 	echo "Got record " . $record->position . " of " . $records->numberOfRecords() . "\n";
