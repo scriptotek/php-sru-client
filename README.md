@@ -3,10 +3,10 @@
 
 ## php-sru-client
 
-A simple PHP class for making [Search/Retrieve via URL](http://www.loc.gov/standards/sru/) (SRU) requests,using the 
+Simple PHP package for making [Search/Retrieve via URL](http://www.loc.gov/standards/sru/) (SRU) requests, using the 
 [Guzzle HTTP client](http://guzzlephp.org/)
 and returning 
-[QuiteSimpleXMLElement](//github.com/danmichaelo/quitesimplexmlelement) instances.
+[QuiteSimpleXMLElement](//github.com/danmichaelo/quitesimplexmlelement) instances. Includes an iterator to easily iterate over search results, abstracting away the process of making multiple requests.
 
 If you prefer a simple text response, you might have a look at
 the [php-sru-search](https://github.com/Zeitschriftendatenbank/php-sru-search) package.
@@ -36,11 +36,11 @@ $url = 'http://sru.bibsys.no/search/biblioholdings';
 $client = new SruClient($url, array(
     'schema' => 'marcxml',
     'version' => '1.1',
-    'user-agent' => 'OpenKat/0.1'
+    'user-agent' => 'MyTool/0.1'
 ));
 ```
 
-To iterate over all the results from a `searchRetrieve` query, use the [Records](//scriptotek.github.io/php-sru-client/api_docs/Scriptotek/Sru/Records.html) class returned from `Client::records()`. It abstracts away the process of actually making the requests. The first argument is
+To iterate over all the results from a `searchRetrieve` query, use the [Records](//scriptotek.github.io/php-sru-client/api_docs/Scriptotek/Sru/Records.html) class returned from `Client::records()`. The first argument is
 the CQL query, and the second optional argument is the number of records to fetch for each request (defaults to 10).
 
 ```php
@@ -51,6 +51,42 @@ if ($records->error) {
 foreach ($records as $record) {
 	echo "Got record " . $record->position . " of " . $records->numberOfRecords() . "\n";
 	// processRecord($record->data);
+}
+```
+
+Use explain to get information about servers:
+
+```php
+$urls = array(
+    'http://sru.bibsys.no/search/biblio',
+    'http://lx2.loc.gov:210/LCDB',
+    'http://services.d-nb.de/sru/zdb',
+    'http://api.libris.kb.se/sru/libris',
+);
+
+foreach ($urls as $url) {
+
+    $client = new SruClient($url, array(
+        'version' => '1.1',
+        'user-agent' => 'MyTool/0.1'
+    ));
+
+    $response = $client->explain();
+
+    if ($response->error) {
+        print 'ERROR: ' . $response->error . "\n";
+        continue;
+    }
+
+    printf("Host: %s:%d\n", $response->host, $response->port);
+    printf("  Database: %s\n", $response->database->identifier);
+    printf("  %s\n", $response->database->title);
+    printf("  %s\n", $response->database->description);
+    print "  Indexes:\n";
+    foreach ($response->indexes as $idx) {
+        printf("   - %s: %s\n", $idx->title, implode(' / ', $idx->maps));
+    }
+
 }
 ```
 
