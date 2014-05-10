@@ -1,7 +1,5 @@
 <?php namespace Scriptotek\Sru;
  
-use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
-
 /**
  * Explain response
  */
