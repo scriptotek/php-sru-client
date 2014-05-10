@@ -1,5 +1,6 @@
 [![Build Status](https://img.shields.io/travis/scriptotek/php-sru-client.svg)](https://travis-ci.org/scriptotek/php-sru-client)
 [![Coverage Status](https://img.shields.io/coveralls/scriptotek/php-sru-client.svg)](https://coveralls.io/r/scriptotek/php-sru-client?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/scriptotek/php-sru-client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/scriptotek/php-sru-client/?branch=master)
 
 ## php-sru-client
 
