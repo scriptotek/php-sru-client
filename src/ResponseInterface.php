@@ -10,6 +10,7 @@ interface ResponseInterface {
      *
      * @param string $text Raw XML response
      * @param Client $client SRU client reference (optional)
+     * @return void
      */
     public function __construct($text, &$client = null);
 

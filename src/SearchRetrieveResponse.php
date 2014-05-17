@@ -1,7 +1,5 @@
 <?php namespace Scriptotek\Sru;
  
-use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
-
 /**
  * SearchRetrieve response, containing a list of records or some error
  */
