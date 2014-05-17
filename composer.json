@@ -5,7 +5,7 @@
     "homepage": "http://github.com/scriptotek/sru-client",
     "keywords": ["sru"],
     "require": {
-        "danmichaelo/quitesimplexmlelement": "0.2.*",
+        "danmichaelo/quitesimplexmlelement": ">=0.2.1",
         "guzzle/guzzle": "3.8.*"
     },
     "require-dev": {
