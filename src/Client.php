@@ -75,6 +75,7 @@ class Client {
      * @param string $cql The CQL query
      * @param int $start Start value in result set (optional)
      * @param int $count Number of records to request (optional)
+     * @param array $extraParams Extra GET parameters
      * @return string
      */
     public function urlTo($cql, $start = 1, $count = 10, $extraParams = array())
@@ -131,6 +132,7 @@ class Client {
      * @param string $cql
      * @param int $start Start value in result set (optional)
      * @param int $count Number of records to request (optional)
+     * @param array $extraParams Extra GET parameters
      * @return SearchRetrieveResponse
      */
     public function search($cql, $start = 1, $count = 10, $extraParams = array()) {
@@ -149,6 +151,7 @@ class Client {
      *
      * @param string $cql
      * @param int $count Number of records to request per request
+     * @param array $extraParams Extra GET parameters
      * @param mixed $httpClient A http client
      * @return Records
      */

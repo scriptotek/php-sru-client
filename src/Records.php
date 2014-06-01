@@ -38,6 +38,7 @@ class Records implements \Iterator {
      * @param string $cql Query
      * @param Client $client SRU client reference (optional)
      * @param int $count Number of records to request per request
+     * @param array $extraParams Extra GET parameters
      * @param mixed $httpClient A http client
      */
 	public function __construct($cql, Client $client, $count = 10, $extraParams = array(), $httpClient = null) {
