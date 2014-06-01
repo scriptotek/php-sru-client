@@ -14,7 +14,7 @@ class RecordsTest extends TestCase {
         $http = $this->httpMockSingleResponse($response);
 
 		$client = new Client($uri);
-		$records = new Records($cql, $client, 10, $http);
+		$records = new Records($cql, $client, 10, array(), $http);
 		$this->assertNull($records->error);
 		$this->assertEquals(8, $records->numberOfRecords());
 		$records->rewind();
@@ -51,7 +51,7 @@ class RecordsTest extends TestCase {
 
 		// Request only one record in each request
 		$client = new Client($uri);
-		$rec = new Records($cql, $client, 1, $http);
+		$rec = new Records($cql, $client, 1, array(), $http);
 
 		// Jumping to position 2 should call fetchMore() and throw 
 		// an InvalidResponseException on getting the same response
@@ -75,7 +75,7 @@ class RecordsTest extends TestCase {
         $cql = 'dummy';
 
 		$client = new Client($uri);
-		$records = new Records($cql, $client, 10, $http);
+		$records = new Records($cql, $client, 10, array(), $http);
 
 		$records->rewind();
 		foreach (range(1, $nrecs) as $n) {

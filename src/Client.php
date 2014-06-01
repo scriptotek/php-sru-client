@@ -77,7 +77,7 @@ class Client {
      * @param int $count Number of records to request (optional)
      * @return string
      */
-    public function urlTo($cql, $start = 1, $count = 10)
+    public function urlTo($cql, $start = 1, $count = 10, $extraParams = array())
     {
         $qs = array(
             'operation' => 'searchRetrieve',
@@ -91,6 +91,10 @@ class Client {
             // At least the BIBSYS SRU service, specifying startRecord results in 
             // a less clear error message when there's no results
             $qs['startRecord'] = $start;
+        }
+
+        foreach ($extraParams as $key => $value) {
+            $qs[$key] = $value;
         }
 
         return $this->url . '?' . http_build_query($qs);
@@ -129,9 +133,9 @@ class Client {
      * @param int $count Number of records to request (optional)
      * @return SearchRetrieveResponse
      */
-    public function search($cql, $start = 1, $count = 10) {
+    public function search($cql, $start = 1, $count = 10, $extraParams = array()) {
 
-        $url = $this->urlTo($cql, $start, $count);
+        $url = $this->urlTo($cql, $start, $count, $extraParams);
         $options = $this->getHttpOptions();
 
         $res = $this->httpClient->get($url, $options)->send();
@@ -148,9 +152,9 @@ class Client {
      * @param mixed $httpClient A http client
      * @return Records
      */
-    public function records($cql, $count = 10, $httpClient = null)
+    public function records($cql, $count = 10, $extraParams = array(), $httpClient = null)
     {
-        return new Records($cql, $this, $count, $httpClient);
+        return new Records($cql, $this, $count, $extraParams, $httpClient);
     }
 
     /**

@@ -20,6 +20,7 @@ class ClientTest extends TestCase {
         $sru1 = new Client($this->url);
         $expectedUrl1 = $this->url . '?operation=searchRetrieve&version=1.1&recordSchema=marcxml&maximumRecords=10&query=isbn%3D123';
         $expectedUrl2 = $this->url . '?operation=searchRetrieve&version=1.1&recordSchema=marcxml&maximumRecords=50&query=isbn%3D123&startRecord=2';
+        $expectedUrl5 = $this->url . '?operation=searchRetrieve&version=1.1&recordSchema=marcxml&maximumRecords=10&query=isbn%3D123&httpAccept=application%2Fxml';
 
         $sru3 = new Client($this->url, array('schema' => 'CUSTOMSCHEMA'));
         $expectedUrl3 = $this->url . '?operation=searchRetrieve&version=1.1&recordSchema=CUSTOMSCHEMA&maximumRecords=10&query=isbn%3D123';
@@ -31,6 +32,7 @@ class ClientTest extends TestCase {
         $this->assertEquals($expectedUrl2, $sru1->urlTo('isbn=123', 2, 50));
         $this->assertEquals($expectedUrl3, $sru3->urlTo('isbn=123'));
         $this->assertEquals($expectedUrl4, $sru4->urlTo('isbn=123'));
+        $this->assertEquals($expectedUrl5, $sru1->urlTo('isbn=123', 1, 10, array('httpAccept' => 'application/xml')));
     }
     
     public function testSearch()
@@ -181,7 +183,7 @@ class ClientTest extends TestCase {
         $http = $this->httpMockSingleResponse($this->makeDummyResponse(1));
 
         $sru1 = new Client($this->url);
-        $r = $sru1->records('test', 1, $http);
+        $r = $sru1->records('test', 1, array(), $http);
 
         $this->assertInstanceOf('Scriptotek\Sru\Records', $r);
     }

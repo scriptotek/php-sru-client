@@ -25,6 +25,7 @@ class Records implements \Iterator {
 
 	private $position;
 	private $count;
+	private $extraParams;
 	private $cql;
 	private $client;
 	private $lastResponse;
@@ -39,9 +40,10 @@ class Records implements \Iterator {
      * @param int $count Number of records to request per request
      * @param mixed $httpClient A http client
      */
-	public function __construct($cql, Client $client, $count = 10, $httpClient = null) {
+	public function __construct($cql, Client $client, $count = 10, $extraParams = array(), $httpClient = null) {
 		$this->position = 1;
 		$this->count = $count; // number of records per request
+		$this->extraParams = $extraParams;
 		$this->cql = $cql;
 		$this->httpClient = $httpClient ?: new HttpClient;
 		$this->client = $client;
@@ -74,7 +76,7 @@ class Records implements \Iterator {
      */
 	private function fetchMore()
 	{
-		$url = $this->client->urlTo($this->cql, $this->position, $this->count);
+		$url = $this->client->urlTo($this->cql, $this->position, $this->count, $this->extraParams);
 		$options = $this->client->getHttpOptions();
 
 		$res = $this->httpClient->get($url, $options)->send();
