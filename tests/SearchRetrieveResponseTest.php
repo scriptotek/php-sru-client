@@ -96,7 +96,7 @@ class SearchRetrieveResponseTest extends TestCase {
         $this->assertEquals('Record 1', $res->records[0]->data);
     }
 
-    public function testError()
+    public function testErrorWithDetails()
     {
       $res = new SearchRetrieveResponse('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
           <srw:version>1.1</srw:version>
@@ -105,12 +105,42 @@ class SearchRetrieveResponseTest extends TestCase {
             <diagnostic >
               <uri>info:srw/diagnostic/1/66</uri>
               <details>Invalid parameter: \'marcxml\' for service: \'biblio\'</details>
-              <message>Unknown schema for retrieval</message>
             </diagnostic>
           </srw:diagnostics>
         </srw:searchRetrieveResponse>');
 
-      $this->assertEquals('Unknown schema for retrieval. Invalid parameter: \'marcxml\' for service: \'biblio\'', $res->error);
+      $this->assertEquals('Unknown schema for retrieval (Invalid parameter: \'marcxml\' for service: \'biblio\')', $res->error);
+    }
+
+    public function testErrorWithoutDetails()
+    {
+      $res = new SearchRetrieveResponse('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
+          <srw:version>1.1</srw:version>
+          <srw:numberOfRecords>0</srw:numberOfRecords>
+          <srw:diagnostics xmlns="http://www.loc.gov/zing/srw/diagnostic/">
+            <diagnostic >
+              <uri>info:srw/diagnostic/1/1</uri>
+            </diagnostic>
+          </srw:diagnostics>
+        </srw:searchRetrieveResponse>');
+      $this->assertEquals('General system error', Response::$errorMessages['info:srw/diagnostic/1/1']);
+      $this->assertEquals('General system error', $res->error);
+    }
+
+    public function testErrorWithCustomMessage()
+    {
+      $res = new SearchRetrieveResponse('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
+          <srw:version>1.1</srw:version>
+          <srw:numberOfRecords>0</srw:numberOfRecords>
+          <srw:diagnostics xmlns="http://www.loc.gov/zing/srw/diagnostic/">
+            <diagnostic >
+              <uri>info:srw/diagnostic/1/10</uri>
+              <message>Too many boolean operators, the maximum is 10. Please try a less complex query.</message>
+              <details>10</details>
+            </diagnostic>
+          </srw:diagnostics>
+        </srw:searchRetrieveResponse>');
+      $this->assertEquals('Too many boolean operators, the maximum is 10. Please try a less complex query. (10)', $res->error);
     }
 
 }
