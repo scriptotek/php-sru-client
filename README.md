@@ -1,6 +1,9 @@
-[![Build Status](https://img.shields.io/travis/scriptotek/php-sru-client.svg)](https://travis-ci.org/scriptotek/php-sru-client)
-[![Coverage Status](https://img.shields.io/coveralls/scriptotek/php-sru-client.svg)](https://coveralls.io/r/scriptotek/php-sru-client?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/scriptotek/php-sru-client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/scriptotek/php-sru-client/?branch=master)
+
+[![Build Status](http://img.shields.io/travis/scriptotek/php-sru-client.svg?style=flat-square)](https://travis-ci.org/scriptotek/php-sru-client)
+[![Coverage Status](http://img.shields.io/coveralls/scriptotek/php-sru-client.svg?style=flat-square)](https://coveralls.io/r/scriptotek/php-sru-client?branch=master)
+[![Code Quality](http://img.shields.io/scrutinizer/g/scriptotek/php-sru-client/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/scriptotek/php-sru-client/?branch=master)
+[![Latest Stable Version](http://img.shields.io/packagist/v/scriptotek/sru-client.svg?style=flat-square)](https://packagist.org/packages/scriptotek/sru-client)
+[![Total Downloads](http://img.shields.io/packagist/dt/scriptotek/sru-client.svg?style=flat-square)](https://packagist.org/packages/scriptotek/sru-client)
 
 ## php-sru-client
 
