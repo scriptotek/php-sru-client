@@ -1,0 +1,11 @@
+{
+  "providers": [
+    "Scriptotek\Sru\Providers\SruServiceProvider"
+  ],
+  "aliases": [
+    {
+      "alias": "SruClient",
+      "facade": "Scriptotek\Sru\Facades\SruClient"
+    }
+  ]
+}
