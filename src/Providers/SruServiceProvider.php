@@ -4,6 +4,7 @@ namespace Scriptotek\Sru\Providers;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
+use Scriptotek\Sru\Client as SruClient;
 
 class SruServiceProvider extends ServiceProvider
 {
