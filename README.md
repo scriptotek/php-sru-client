@@ -60,7 +60,14 @@ $client = new SruClient($url, array(
 ));
 ```
 
-To iterate over all the results from a `searchRetrieve` query, use the [Records](//scriptotek.github.io/php-sru-client/api_docs/Scriptotek/Sru/Records.html) class returned from `Client::records()`. The first argument is
+To get the first record matching a query:
+```php
+$client->first('bs.isbn="0415919118"');
+```
+The result is a [Record](//scriptotek.github.io/php-sru-client/api_docs/Scriptotek/Sru/Record.html)
+object, or `null` if not found.
+
+To iterate over all the results from a `searchRetrieve` query, use the [Records](//scriptotek.github.io/php-sru-client/api_docs/Scriptotek/Sru/Records.html) object returned from `Client::records()`. The first argument is
 the CQL query, and the second optional argument is the number of records to fetch for each request (defaults to 10).
 
 ```php

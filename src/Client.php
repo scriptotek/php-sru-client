@@ -161,6 +161,20 @@ class Client {
     }
 
     /**
+     * Perform a searchRetrieve request and return first record
+     *
+     * @param string $cql
+     * @param array $extraParams Extra GET parameters
+     * @param mixed $httpClient A http client
+     * @return Record
+     */
+    public function first($cql, $extraParams = array(), $httpClient = null)
+    {
+        $recs = new Records($cql, $this, 1, $extraParams, $httpClient);
+        return $recs->numberOfRecords() ? $recs->current() : null;
+    }
+
+    /**
      * Perform an explain request
      *
      * @return ExplainResponse
