@@ -7,29 +7,7 @@ use Illuminate\Support\ServiceProvider;
 
 class SruServiceProvider extends ServiceProvider
 {
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-    /**
-     * Actual provider
-     *
-     * @var \Illuminate\Support\ServiceProvider
-     */
-    protected $provider;
-    /**
-     * Create a new service provider instance.
-     *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
-     * @return void
-     */
-    public function __construct($app)
-    {
-        parent::__construct($app);
-        $this->provider = $this->getProvider();
-    }
+
     /**
      * Bootstrap the application events.
      *
@@ -37,8 +15,11 @@ class SruServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        return $this->provider->boot();
+        $this->publishes(array(
+            __DIR__.'/../../config/config.php' => config_path('sru.php')
+        ));
     }
+
     /**
      * Register the service provider.
      *
@@ -46,22 +27,17 @@ class SruServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        return $this->provider->register();
+        $app = $this->app;
+        $this->mergeConfigFrom(
+            __DIR__.'/../../config/config.php',
+            'sru'
+        );
+        $app['sru-client'] = $app->share(function ($app) {
+            return new SruClient($app['config']->get('sru.endpoint'), $app['config']->get('sru'));
+        });
+        $app->alias('sru-client', 'Scriptotek\Sru\Client');
     }
-    /**
-     * Return ServiceProvider according to Laravel version
-     *
-     * @return \Scriptotek\Sru\Provider\ProviderInterface
-     */
-    private function getProvider()
-    {
-        if (version_compare(Application::VERSION, '5.0', '<')) {
-            $provider = '\Scriptotek\Sru\SruClientProviderLaravel4';
-        } else {
-            $provider = '\Scriptotek\Sru\SruClientProviderLaravel5';
-        }
-        return new $provider($this->app);
-    }
+
     /**
      * Get the services provided by the provider.
      *

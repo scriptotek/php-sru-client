@@ -29,25 +29,21 @@ Add the package to the `require` list of your `composer.json` file.
 
 and run `composer install` to get the latest version of the package.
 
-### Laravel 4/5 integration
+### Laravel 5 integration
 
 In the $providers array add the service providers for this package:
 
-    'Scriptotek\Sru\Providers\SruServiceProvider'
+    Scriptotek\Sru\Providers\SruServiceProvider::class,
 
 Add the facade of this package to the `$aliases` array:
 
-    'SruClient' => 'Scriptotek\Sru\Facades\SruClient'
+    'SruClient' => Scriptotek\Sru\Facades\SruClient::class,
 
 Publish configuration in Laravel 5:
 
-    $ php artisan vendor:publish --provider="Scriptotek\Sru\Providers\SruServiceProviderLaravel5"
+    $ php artisan vendor:publish --provider="Scriptotek\Sru\Providers\SruServiceProvider"
 
-Publish configuration in Laravel 4:
-
-    $ php artisan config:publish scriptotek/sru
-
-In Laravel 5 applications the configuration file is copied to `config/sru.php`, in Laravel 4 applications you will find the file at `app/config/packages/scriptotek/sru/config.php`.
+The configuration file is copied to `config/sru.php`.
 
 ### Example
 
