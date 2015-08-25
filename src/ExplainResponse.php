@@ -1,10 +1,10 @@
 <?php namespace Scriptotek\Sru;
- 
+
 /**
  * Explain response
  */
-class ExplainResponse extends Response implements ResponseInterface {
-
+class ExplainResponse extends Response implements ResponseInterface
+{
     /** @var string Server hostname */
     public $host;
 
@@ -30,7 +30,9 @@ class ExplainResponse extends Response implements ResponseInterface {
         $this->indexes = array();
 
         $explain = $this->response->first('/srw:explainResponse/srw:record/srw:recordData/exp:explain');
-        if (!$explain) return;
+        if (!$explain) {
+            return;
+        }
 
         $serverInfo = $explain->first('exp:serverInfo');
         $dbInfo = $explain->first('exp:databaseInfo');
@@ -59,8 +61,5 @@ class ExplainResponse extends Response implements ResponseInterface {
         }
 
         // TODO
-
     }
-
 }
-

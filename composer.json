@@ -11,8 +11,8 @@
     "require-dev": {
         "phpunit/phpunit": "4.0.*",
         "satooshi/php-coveralls": "dev-master",
-        "mockery/mockery": "dev-master",
-        "sami/sami": "1.4.*"
+        "sami/sami": "1.4.*",
+        "mockery/mockery": "dev-master"
     },
     "license": "MIT",
     "authors": [

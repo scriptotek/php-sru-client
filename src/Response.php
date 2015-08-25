@@ -1,13 +1,13 @@
 <?php namespace Scriptotek\Sru;
- 
+
 use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
 
 /**
  * Generic SRU response
  */
-class Response implements ResponseInterface {
-
-    static public $errorMessages = array(
+class Response implements ResponseInterface
+{
+    public static $errorMessages = array(
         'info:srw/diagnostic/1/1' => 'General system error',
         'info:srw/diagnostic/1/2' => 'System temporarily unavailable',
         'info:srw/diagnostic/1/3' => 'Authentication error',
@@ -144,8 +144,7 @@ class Response implements ResponseInterface {
                 }
             }
             if (!empty($details)) {
-                $msg .= ' (' . $details . ')'; 
-
+                $msg .= ' (' . $details . ')';
             }
             $this->error = $msg;
         }
@@ -160,6 +159,4 @@ class Response implements ResponseInterface {
     {
         return $this->rawResponse;
     }
-
 }
-

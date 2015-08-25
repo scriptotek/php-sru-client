@@ -1,10 +1,10 @@
 <?php namespace Scriptotek\Sru;
 
-use \Guzzle\Http\Message\Response as HttpResponse;
-use \Mockery as m;
+use Guzzle\Http\Message\Response as HttpResponse;
+use Mockery as m;
 
-class TestCase extends \PHPUnit_Framework_TestCase {
-
+class TestCase extends \PHPUnit_Framework_TestCase
+{
     protected $recordTpl = '<srw:record>
             <srw:recordSchema>marcxchange</srw:recordSchema>
             <srw:recordPacking>xml</srw:recordPacking>
@@ -13,8 +13,8 @@ class TestCase extends \PHPUnit_Framework_TestCase {
           </srw:record>';
 
     protected $mainTpl = '<?xml version="1.0" encoding="UTF-8" ?>
-      <srw:searchRetrieveResponse 
-        xmlns:srw="http://www.loc.gov/zing/srw/" 
+      <srw:searchRetrieveResponse
+        xmlns:srw="http://www.loc.gov/zing/srw/"
         xmlns:xcql="http://www.loc.gov/zing/cql/xcql/"
       >
         <srw:version>1.1</srw:version>
@@ -46,14 +46,16 @@ class TestCase extends \PHPUnit_Framework_TestCase {
      */
     private function array_get($array, $key, $default = null)
     {
-        if (is_null($key)) return $array;
+        if (is_null($key)) {
+            return $array;
+        }
 
-        if (isset($array[$key])) return $array[$key];
+        if (isset($array[$key])) {
+            return $array[$key];
+        }
 
-        foreach (explode('.', $key) as $segment)
-        {
-            if ( ! is_array($array) or ! array_key_exists($segment, $array))
-            {
+        foreach (explode('.', $key) as $segment) {
+            if (! is_array($array) or ! array_key_exists($segment, $array)) {
                 return $default;
             }
 
@@ -69,18 +71,18 @@ class TestCase extends \PHPUnit_Framework_TestCase {
     public function makeDummyResponse($numberOfRecords = 10, $options = array())
     {
         // Request: CQL
-        $cql = $this->array_get( $options, 'cql', 'dummy' );
+        $cql = $this->array_get($options, 'cql', 'dummy');
 
         // Request: First record to fetch
-        $startRecord = $this->array_get( $options, 'startRecord', 1 );
+        $startRecord = $this->array_get($options, 'startRecord', 1);
 
         // Request: Max number of records to return
-        $maxRecords = $this->array_get( $options, 'maxRecords', 10 );
+        $maxRecords = $this->array_get($options, 'maxRecords', 10);
 
         $endRecord = $startRecord + min($maxRecords - 1, $numberOfRecords - $startRecord);
 
         $recordTpl = $this->recordTpl;
-        $records = implode('', array_map(function($n) use ($recordTpl) {
+        $records = implode('', array_map(function ($n) use ($recordTpl) {
             return str_replace(
                 array('{{position}}', '{{data}}'),
                 array($n, 'RecordData #' . $n),
@@ -103,7 +105,7 @@ class TestCase extends \PHPUnit_Framework_TestCase {
         $request = m::mock();
         $request->shouldReceive('send')
             ->once()
-            ->andReturn(new HttpResponse(200, null, $response));
+            ->andReturn(new HttpResponse(200, array(), $response));
 
         $http = m::mock();
         $http->shouldReceive('get')
@@ -120,7 +122,7 @@ class TestCase extends \PHPUnit_Framework_TestCase {
     {
         $request = m::mock();
         $request->shouldReceive('send')
-            ->andReturnValues(array_map(function($r) {
+            ->andReturnValues(array_map(function ($r) {
                 return new HttpResponse(200, null, $r);
             }, $responses));
 
@@ -130,6 +132,4 @@ class TestCase extends \PHPUnit_Framework_TestCase {
 
         return $http;
     }
-
 }
-

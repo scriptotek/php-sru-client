@@ -1,13 +1,12 @@
 <?php namespace Scriptotek\Sru;
 
-use \Guzzle\Http\Message\Response as HttpResponse;
-use \Mockery as m;
+use Mockery as m;
 
-class ExplainResponseTest extends TestCase {
-
-	public function testNormalResponse()
-	{
-		$res = new ExplainResponse('<?xml version="1.0" encoding="UTF-8"?>
+class ExplainResponseTest extends TestCase
+{
+    public function testNormalResponse()
+    {
+        $res = new ExplainResponse('<?xml version="1.0" encoding="UTF-8"?>
 			<sru:explainResponse xmlns:sru="http://www.loc.gov/zing/srw/">
 			  <sru:version>1.2</sru:version>
 			  <sru:record>
@@ -103,20 +102,18 @@ class ExplainResponseTest extends TestCase {
 			  </sru:record>
 			</sru:explainResponse>');
 
-		$this->assertNull($res->error);
-		$this->assertEquals('1.2', $res->version);
-		$this->assertEquals('sru.bibsys.no', $res->host);
-		$this->assertEquals(80, $res->port);
-		$this->assertEquals('biblio', $res->database->identifier);
-		$this->assertEquals('BIBSYS Union Catalogue', $res->database->title);
-		$this->assertEquals('SRU access to the BIBSYS Union Catalogue.', $res->database->description);
-		$this->assertCount(7, $res->indexes);
-		$this->assertFalse($res->indexes[0]->scan);
-		$this->assertTrue($res->indexes[0]->sort);
-		$this->assertTrue($res->indexes[0]->search);
-		$this->assertEquals('Identifiserer en bibliografisk enhet', $res->indexes[0]->title);
-		$this->assertEquals('bs.objektid', $res->indexes[0]->maps[0]);
-
-	}
-
+        $this->assertNull($res->error);
+        $this->assertEquals('1.2', $res->version);
+        $this->assertEquals('sru.bibsys.no', $res->host);
+        $this->assertEquals(80, $res->port);
+        $this->assertEquals('biblio', $res->database->identifier);
+        $this->assertEquals('BIBSYS Union Catalogue', $res->database->title);
+        $this->assertEquals('SRU access to the BIBSYS Union Catalogue.', $res->database->description);
+        $this->assertCount(7, $res->indexes);
+        $this->assertFalse($res->indexes[0]->scan);
+        $this->assertTrue($res->indexes[0]->sort);
+        $this->assertTrue($res->indexes[0]->search);
+        $this->assertEquals('Identifiserer en bibliografisk enhet', $res->indexes[0]->title);
+        $this->assertEquals('bs.objektid', $res->indexes[0]->maps[0]);
+    }
 }

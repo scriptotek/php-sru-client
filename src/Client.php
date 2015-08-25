@@ -1,12 +1,12 @@
 <?php namespace Scriptotek\Sru;
- 
+
 use \Guzzle\Http\Client as HttpClient;
 
 /**
  * SRU client
  */
-class Client {
-
+class Client
+{
     /** @var HttpClient */
     protected $httpClient;
 
@@ -25,7 +25,7 @@ class Client {
     /**
      * @var string|string[] Proxy configuration details.
      *
-     * Either a string 'host:port' or an 
+     * Either a string 'host:port' or an
      * array('host:port', 'username', 'password').
      */
     protected $proxy;
@@ -89,7 +89,7 @@ class Client {
         );
 
         if ($start != 1) {
-            // At least the BIBSYS SRU service, specifying startRecord results in 
+            // At least the BIBSYS SRU service, specifying startRecord results in
             // a less clear error message when there's no results
             $qs['startRecord'] = $start;
         }
@@ -103,7 +103,7 @@ class Client {
 
     /**
      * Get HTTP client configuration options (authentication, proxy, headers)
-     * 
+     *
      * @return array
      */
     public function getHttpOptions()
@@ -135,8 +135,8 @@ class Client {
      * @param array $extraParams Extra GET parameters
      * @return SearchRetrieveResponse
      */
-    public function search($cql, $start = 1, $count = 10, $extraParams = array()) {
-
+    public function search($cql, $start = 1, $count = 10, $extraParams = array())
+    {
         $url = $this->urlTo($cql, $start, $count, $extraParams);
         $options = $this->getHttpOptions();
 
@@ -179,8 +179,8 @@ class Client {
      *
      * @return ExplainResponse
      */
-    public function explain() {
-
+    public function explain()
+    {
         $url = $this->url . '?' . http_build_query(array(
             'operation' => 'explain',
             'version' => $this->version,
@@ -191,8 +191,5 @@ class Client {
         $body = $res->getBody(true);
 
         return new ExplainResponse($body, $this);
-
     }
-
 }
-

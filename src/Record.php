@@ -1,12 +1,12 @@
 <?php namespace Scriptotek\Sru;
- 
+
 use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
 
 /**
  * Single record from a SRU response
  */
-class Record {
-
+class Record
+{
     /** @var int */
     public $position;
 
@@ -31,5 +31,4 @@ class Record {
         $this->schema = $doc->text('./srw:recordSchema');
         $this->data = $doc->first('./srw:recordData');
     }
-
 }

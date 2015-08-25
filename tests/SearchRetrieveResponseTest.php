@@ -1,15 +1,14 @@
 <?php namespace Scriptotek\Sru;
 
-use \Guzzle\Http\Message\Response as HttpResponse;
-use \Mockery as m;
+use Mockery as m;
 
-class SearchRetrieveResponseTest extends TestCase {
-
+class SearchRetrieveResponseTest extends TestCase
+{
     public function testSingleRecordResult()
     {
         $res = new SearchRetrieveResponse('<?xml version="1.0" encoding="UTF-8" ?>
-          <srw:searchRetrieveResponse 
-            xmlns:srw="http://www.loc.gov/zing/srw/" 
+          <srw:searchRetrieveResponse
+            xmlns:srw="http://www.loc.gov/zing/srw/"
             xmlns:xcql="http://www.loc.gov/zing/cql/xcql/"
           >
             <srw:version>1.1</srw:version>
@@ -50,8 +49,8 @@ class SearchRetrieveResponseTest extends TestCase {
     public function testMultipleRecordsResult()
     {
         $res = new SearchRetrieveResponse('<?xml version="1.0" encoding="UTF-8" ?>
-          <srw:searchRetrieveResponse 
-            xmlns:srw="http://www.loc.gov/zing/srw/" 
+          <srw:searchRetrieveResponse
+            xmlns:srw="http://www.loc.gov/zing/srw/"
             xmlns:xcql="http://www.loc.gov/zing/cql/xcql/"
           >
             <srw:version>1.1</srw:version>
@@ -98,7 +97,7 @@ class SearchRetrieveResponseTest extends TestCase {
 
     public function testErrorWithDetails()
     {
-      $res = new SearchRetrieveResponse('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
+        $res = new SearchRetrieveResponse('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
           <srw:version>1.1</srw:version>
           <srw:numberOfRecords>0</srw:numberOfRecords>
           <srw:diagnostics xmlns="http://www.loc.gov/zing/srw/diagnostic/">
@@ -109,12 +108,12 @@ class SearchRetrieveResponseTest extends TestCase {
           </srw:diagnostics>
         </srw:searchRetrieveResponse>');
 
-      $this->assertEquals('Unknown schema for retrieval (Invalid parameter: \'marcxml\' for service: \'biblio\')', $res->error);
+        $this->assertEquals('Unknown schema for retrieval (Invalid parameter: \'marcxml\' for service: \'biblio\')', $res->error);
     }
 
     public function testErrorWithoutDetails()
     {
-      $res = new SearchRetrieveResponse('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
+        $res = new SearchRetrieveResponse('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
           <srw:version>1.1</srw:version>
           <srw:numberOfRecords>0</srw:numberOfRecords>
           <srw:diagnostics xmlns="http://www.loc.gov/zing/srw/diagnostic/">
@@ -123,13 +122,13 @@ class SearchRetrieveResponseTest extends TestCase {
             </diagnostic>
           </srw:diagnostics>
         </srw:searchRetrieveResponse>');
-      $this->assertEquals('General system error', Response::$errorMessages['info:srw/diagnostic/1/1']);
-      $this->assertEquals('General system error', $res->error);
+        $this->assertEquals('General system error', Response::$errorMessages['info:srw/diagnostic/1/1']);
+        $this->assertEquals('General system error', $res->error);
     }
 
     public function testErrorWithCustomMessage()
     {
-      $res = new SearchRetrieveResponse('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
+        $res = new SearchRetrieveResponse('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
           <srw:version>1.1</srw:version>
           <srw:numberOfRecords>0</srw:numberOfRecords>
           <srw:diagnostics xmlns="http://www.loc.gov/zing/srw/diagnostic/">
@@ -140,7 +139,6 @@ class SearchRetrieveResponseTest extends TestCase {
             </diagnostic>
           </srw:diagnostics>
         </srw:searchRetrieveResponse>');
-      $this->assertEquals('Too many boolean operators, the maximum is 10. Please try a less complex query. (10)', $res->error);
+        $this->assertEquals('Too many boolean operators, the maximum is 10. Please try a less complex query. (10)', $res->error);
     }
-
 }

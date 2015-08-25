@@ -1,10 +1,10 @@
 <?php namespace Scriptotek\Sru;
- 
+
 /**
  * SearchRetrieve response, containing a list of records or some error
  */
-class SearchRetrieveResponse extends Response implements ResponseInterface {
-
+class SearchRetrieveResponse extends Response implements ResponseInterface
+{
     /** @var Record[] Array of records */
     public $records;
 
@@ -57,6 +57,4 @@ class SearchRetrieveResponse extends Response implements ResponseInterface {
         }
         return $this->client->search($this->query, $this->nextRecordPosition, count($this->records));
     }
-
 }
-

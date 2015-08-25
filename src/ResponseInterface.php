@@ -3,8 +3,8 @@
 /**
  * Interface defining data objects that hold the information of an SRU response
  */
-interface ResponseInterface {
-
+interface ResponseInterface
+{
     /**
      * Create a new response
      *
@@ -20,6 +20,4 @@ interface ResponseInterface {
      * @return string
      */
     public function asXml();
-
 }
-

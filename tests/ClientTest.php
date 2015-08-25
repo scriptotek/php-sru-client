@@ -1,10 +1,10 @@
 <?php namespace Scriptotek\Sru;
 
-use \Guzzle\Http\Message\Response as HttpResponse;
-use \Mockery as m;
+use Guzzle\Http\Message\Response as HttpResponse;
+use Mockery as m;
 
-class ClientTest extends TestCase {
-
+class ClientTest extends TestCase
+{
     protected $url = 'http://sru.my_fictive_host.net';
 
     protected $simple_response = '<?xml version="1.0" encoding="UTF-8" ?>
@@ -34,7 +34,7 @@ class ClientTest extends TestCase {
         $this->assertEquals($expectedUrl4, $sru4->urlTo('isbn=123'));
         $this->assertEquals($expectedUrl5, $sru1->urlTo('isbn=123', 1, 10, array('httpAccept' => 'application/xml')));
     }
-    
+
     public function testSearch()
     {
         $http = $this->httpMockSingleResponse($this->simple_response);
@@ -53,7 +53,7 @@ class ClientTest extends TestCase {
         $request = m::mock();
         $request->shouldReceive('send')
             ->once()
-            ->andReturn(new HttpResponse(200, null, $this->simple_response));
+            ->andReturn(new HttpResponse(200, array(), $this->simple_response));
 
         $http = m::mock();
         $http->shouldReceive('get')
@@ -78,8 +78,8 @@ class ClientTest extends TestCase {
         $request->shouldReceive('send')
             ->once()
             ->andReturn(new HttpResponse(200, null, '<?xml version="1.0" encoding="UTF-8" ?>
-              <srw:searchRetrieveResponse 
-                xmlns:srw="http://www.loc.gov/zing/srw/" 
+              <srw:searchRetrieveResponse
+                xmlns:srw="http://www.loc.gov/zing/srw/"
                 xmlns:xcql="http://www.loc.gov/zing/cql/xcql/"
               >
                 <srw:version>1.1</srw:version>
@@ -125,8 +125,8 @@ class ClientTest extends TestCase {
         $request->shouldReceive('send')
             ->once()
             ->andReturn(new HttpResponse(200, null, '<?xml version="1.0" encoding="UTF-8" ?>
-              <srw:searchRetrieveResponse 
-                xmlns:srw="http://www.loc.gov/zing/srw/" 
+              <srw:searchRetrieveResponse
+                xmlns:srw="http://www.loc.gov/zing/srw/"
                 xmlns:xcql="http://www.loc.gov/zing/cql/xcql/"
               >
                 <srw:version>1.1</srw:version>
@@ -158,8 +158,6 @@ class ClientTest extends TestCase {
 
         $response = $response->next();
         $this->assertNull($response);
-
-
     }
 
     public function testHttpOptions()
@@ -201,6 +199,4 @@ class ClientTest extends TestCase {
             $exp->asXml()
         );
     }
-
 }
-
