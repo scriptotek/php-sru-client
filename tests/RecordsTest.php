@@ -14,10 +14,8 @@ class RecordsTest extends TestCase
 
         $client = new Client($uri);
         $records = new Records($cql, $client, 10, array(), $http);
-        $this->assertNull($records->error);
         $this->assertEquals(8, $records->numberOfRecords());
         $records->rewind();
-        $this->assertNull($records->error);
 
         $this->assertEquals(1, $records->key());
         $this->assertTrue($records->valid());
@@ -37,7 +35,7 @@ class RecordsTest extends TestCase
     }
 
     /**
-     * @expectedException Scriptotek\Sru\InvalidResponseException
+     * @expectedException Scriptotek\Sru\Exceptions\InvalidResponseException
      */
     public function testRepeatSameResponse()
     {

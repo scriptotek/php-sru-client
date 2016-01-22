@@ -53,18 +53,6 @@ class Records implements \Iterator
     }
 
     /**
-     * Return error message from last reponse, if any
-     *
-     * @return string|null
-     */
-    public function __get($prop)
-    {
-        if ($prop == 'error') {
-            return $this->lastResponse->error;
-        }
-    }
-
-    /**
      * Return the number of records
      *
      * @return int|null
@@ -88,7 +76,7 @@ class Records implements \Iterator
         $this->data = $this->lastResponse->records;
 
         if (count($this->data) != 0 && $this->data[0]->position != $this->position) {
-            throw new InvalidResponseException('Wrong index of first record in result set. '
+            throw new Exceptions\InvalidResponseException('Wrong index of first record in result set. '
                 . 'Expected: ' .$this->position . ', got: ' . $this->data[0]->position
             );
         }

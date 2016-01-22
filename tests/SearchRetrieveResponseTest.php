@@ -34,7 +34,6 @@ class SearchRetrieveResponseTest extends TestCase
             </srw:extraResponseData>
           </srw:searchRetrieveResponse>');
 
-        $this->assertNull($res->error);
         $this->assertEquals('1.1', $res->version);
         $this->assertEquals(1, $res->numberOfRecords);
         $this->assertNull($res->nextRecordPosition);
@@ -83,7 +82,6 @@ class SearchRetrieveResponseTest extends TestCase
             </srw:extraResponseData>
           </srw:searchRetrieveResponse>');
 
-        $this->assertNull($res->error);
         $this->assertEquals('1.1', $res->version);
         $this->assertEquals(303, $res->numberOfRecords);
         $this->assertEquals(3, $res->nextRecordPosition);
@@ -95,6 +93,10 @@ class SearchRetrieveResponseTest extends TestCase
         $this->assertEquals('Record 1', $res->records[0]->data);
     }
 
+    /**
+     * @expectedException         Scriptotek\Sru\Exceptions\SruErrorException
+     * @expectedExceptionMessage  Unknown schema for retrieval (Invalid parameter: 'marcxml' for service: 'biblio')
+     */
     public function testErrorWithDetails()
     {
         $res = new SearchRetrieveResponse('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
@@ -107,10 +109,12 @@ class SearchRetrieveResponseTest extends TestCase
             </diagnostic>
           </srw:diagnostics>
         </srw:searchRetrieveResponse>');
-
-        $this->assertEquals('Unknown schema for retrieval (Invalid parameter: \'marcxml\' for service: \'biblio\')', $res->error);
     }
 
+    /**
+     * @expectedException         Scriptotek\Sru\Exceptions\SruErrorException
+     * @expectedExceptionMessage  General system error
+     */
     public function testErrorWithoutDetails()
     {
         $res = new SearchRetrieveResponse('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
@@ -122,10 +126,12 @@ class SearchRetrieveResponseTest extends TestCase
             </diagnostic>
           </srw:diagnostics>
         </srw:searchRetrieveResponse>');
-        $this->assertEquals('General system error', Response::$errorMessages['info:srw/diagnostic/1/1']);
-        $this->assertEquals('General system error', $res->error);
     }
 
+    /**
+     * @expectedException         Scriptotek\Sru\Exceptions\SruErrorException
+     * @expectedExceptionMessage  Too many boolean operators, the maximum is 10. Please try a less complex query. (10)
+     */
     public function testErrorWithCustomMessage()
     {
         $res = new SearchRetrieveResponse('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
@@ -139,6 +145,5 @@ class SearchRetrieveResponseTest extends TestCase
             </diagnostic>
           </srw:diagnostics>
         </srw:searchRetrieveResponse>');
-        $this->assertEquals('Too many boolean operators, the maximum is 10. Please try a less complex query. (10)', $res->error);
     }
 }

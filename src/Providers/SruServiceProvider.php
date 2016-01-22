@@ -36,7 +36,7 @@ class SruServiceProvider extends ServiceProvider
         $app['sru-client'] = $app->share(function ($app) {
             return new SruClient($app['config']->get('sru.endpoint'), $app['config']->get('sru'));
         });
-        $app->alias('sru-client', 'Scriptotek\Sru\Client');
+        $app->alias('sru-client', SruClient::class);
     }
 
     /**

@@ -101,9 +101,6 @@ class Response implements ResponseInterface
     /** @var Client Reference to SRU client object */
     protected $client;
 
-    /** @var string Error message */
-    public $error;
-
     /** @var string SRU protocol version */
     public $version;
 
@@ -146,7 +143,7 @@ class Response implements ResponseInterface
             if (!empty($details)) {
                 $msg .= ' (' . $details . ')';
             }
-            $this->error = $msg;
+            throw new Exceptions\SruErrorException($msg, $uri);
         }
     }
 

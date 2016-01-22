@@ -102,7 +102,6 @@ class ExplainResponseTest extends TestCase
 			  </sru:record>
 			</sru:explainResponse>');
 
-        $this->assertNull($res->error);
         $this->assertEquals('1.2', $res->version);
         $this->assertEquals('sru.bibsys.no', $res->host);
         $this->assertEquals(80, $res->port);

@@ -1,4 +1,4 @@
-<?php namespace Scriptotek\Sru;
+<?php namespace Scriptotek\Sru\Exceptions;
 
 class InvalidResponseException extends \Exception
 {
