@@ -127,23 +127,25 @@ class Response implements ResponseInterface
 
         $this->version = $this->response->text('/srw:*/srw:version');
 
-        $e = $this->response->first('/srw:*/srw:diagnostics');
-        if ($e) {
+        $diagnostic = $this->response->first('/srw:*/srw:diagnostics/d:diagnostic');
+        if ($diagnostic) {
             // Only the 'uri' field is required, 'message' and 'details' are optional
-            $uri = $e->text('d:diagnostic/d:uri');
-            $msg = $e->text('d:diagnostic/d:message');
-            $details = $e->text('d:diagnostic/d:details');
-            if (empty($msg)) {
-                if (isset(self::$errorMessages[$uri])) {
-                    $msg = self::$errorMessages[$uri];
-                } else {
-                    $msg = 'Unknown error';
+            $uri = $diagnostic->text('d:uri');
+            if (strlen($uri)) {
+                $msg = $diagnostic->text('d:message');
+                $details = $diagnostic->text('d:details');
+                if (empty($msg)) {
+                    if (isset(self::$errorMessages[$uri])) {
+                        $msg = self::$errorMessages[$uri];
+                    } else {
+                        $msg = 'Unknown error';
+                    }
                 }
+                if (!empty($details)) {
+                    $msg .= ' (' . $details . ')';
+                }
+                throw new Exceptions\SruErrorException($msg, $uri);
             }
-            if (!empty($details)) {
-                $msg .= ' (' . $details . ')';
-            }
-            throw new Exceptions\SruErrorException($msg, $uri);
         }
     }
 

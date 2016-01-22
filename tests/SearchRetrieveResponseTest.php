@@ -146,4 +146,16 @@ class SearchRetrieveResponseTest extends TestCase
           </srw:diagnostics>
         </srw:searchRetrieveResponse>');
     }
+
+    // Should not throw error
+    public function testDiagnosticsWithoutError()
+    {
+        $res = new SearchRetrieveResponse('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
+          <srw:version>1.1</srw:version>
+          <srw:numberOfRecords>0</srw:numberOfRecords>
+          <srw:diagnostics xmlns="http://www.loc.gov/zing/srw/diagnostic/">
+          </srw:diagnostics>
+        </srw:searchRetrieveResponse>');
+    }
+
 }
