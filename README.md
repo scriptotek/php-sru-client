@@ -81,7 +81,7 @@ foreach ($records as $record) {
 }
 ```
 
-Use explain to get information about servers:
+#### Use explain to get information about servers:
 
 ```php
 $urls = array(
