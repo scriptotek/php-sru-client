@@ -112,6 +112,10 @@ class Response implements ResponseInterface
      */
     public function __construct($text, &$client = null)
     {
+
+        // Fix missing namespace in Alma records:
+        $text = str_replace('<record xmlns="">', '<record xmlns="http://www.loc.gov/MARC21/slim">', $text);
+
         $this->rawResponse = $text;
 
         // Throws Danmichaelo\QuiteSimpleXMLElement\InvalidXMLException on invalid xml
