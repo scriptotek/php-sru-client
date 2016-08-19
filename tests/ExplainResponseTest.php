@@ -115,4 +115,10 @@ class ExplainResponseTest extends TestCase
         $this->assertEquals('Identifiserer en bibliografisk enhet', $res->indexes[0]->title);
         $this->assertEquals('bs.objektid', $res->indexes[0]->maps[0]);
     }
+
+    public function testCanBeInitializedWithoutAnyData()
+    {
+        $res = new ExplainResponse;
+        $this->assertNull($res->host);
+    }
 }

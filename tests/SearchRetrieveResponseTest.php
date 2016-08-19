@@ -158,4 +158,10 @@ class SearchRetrieveResponseTest extends TestCase
         </srw:searchRetrieveResponse>');
     }
 
+    public function testCanBeInitializedWithoutAnyData()
+    {
+        $res = new SearchRetrieveResponse;
+        $this->assertNull($res->version);
+    }
+
 }

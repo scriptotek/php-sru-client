@@ -93,7 +93,7 @@ class Response implements ResponseInterface
     );
 
     /** @var string Raw XML response */
-    protected $rawResponse;
+    protected $rawResponse = '';
 
     /** @var QuiteSimpleXMLElement XML response */
     protected $response;
@@ -110,46 +110,56 @@ class Response implements ResponseInterface
      * @param string $text Raw XML response
      * @param Client $client SRU client reference (optional)
      */
-    public function __construct($text, &$client = null)
+    public function __construct($text = null, &$client = null)
     {
+        $this->client = $client;
 
+        if (!is_null($text)) {
+            $this->initializeFromText($text);
+        }
+    }
+
+    protected function initializeFromText($text)
+    {
         // Fix missing namespace in Alma records:
         $text = str_replace('<record xmlns="">', '<record xmlns="http://www.loc.gov/MARC21/slim">', $text);
 
         $this->rawResponse = $text;
 
         // Throws Danmichaelo\QuiteSimpleXMLElement\InvalidXMLException on invalid xml
-        $this->response = new QuiteSimpleXMLElement($text);
-
-        $this->client = $client;
-
-        $this->response->registerXPathNamespaces(array(
+        $this->response = QuiteSimpleXMLElement::make($text, [
             'srw' => 'http://www.loc.gov/zing/srw/',
             'exp' => 'http://explain.z3950.org/dtd/2.0/',
-            'd' => 'http://www.loc.gov/zing/srw/diagnostic/'
-        ));
+            'd' => 'http://www.loc.gov/zing/srw/diagnostic/',
+        ]);
 
         $this->version = $this->response->text('/srw:*/srw:version');
 
-        $diagnostic = $this->response->first('/srw:*/srw:diagnostics/d:diagnostic');
-        if ($diagnostic) {
-            // Only the 'uri' field is required, 'message' and 'details' are optional
-            $uri = $diagnostic->text('d:uri');
-            if (strlen($uri)) {
-                $msg = $diagnostic->text('d:message');
-                $details = $diagnostic->text('d:details');
-                if (empty($msg)) {
-                    if (isset(self::$errorMessages[$uri])) {
-                        $msg = self::$errorMessages[$uri];
-                    } else {
-                        $msg = 'Unknown error';
-                    }
+        $this->handleDiagnostic($this->response->first('/srw:*/srw:diagnostics/d:diagnostic'));
+    }
+
+    protected function handleDiagnostic(QuiteSimpleXMLElement $node = null)
+    {
+        if (is_null($node)) {
+            return;
+        }
+
+        // Only the 'uri' field is required, 'message' and 'details' are optional
+        $uri = $node->text('d:uri');
+        if (strlen($uri)) {
+            $msg = $node->text('d:message');
+            $details = $node->text('d:details');
+            if (empty($msg)) {
+                if (isset(self::$errorMessages[$uri])) {
+                    $msg = self::$errorMessages[$uri];
+                } else {
+                    $msg = 'Unknown error';
                 }
-                if (!empty($details)) {
-                    $msg .= ' (' . $details . ')';
-                }
-                throw new Exceptions\SruErrorException($msg, $uri);
             }
+            if (!empty($details)) {
+                $msg .= ' (' . $details . ')';
+            }
+            throw new Exceptions\SruErrorException($msg, $uri);
         }
     }
 

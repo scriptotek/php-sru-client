@@ -6,16 +6,16 @@
 class SearchRetrieveResponse extends Response implements ResponseInterface
 {
     /** @var Record[] Array of records */
-    public $records;
+    public $records = [];
 
     /** @var int Total number of records in the result set */
-    public $numberOfRecords;
+    public $numberOfRecords = 0;
 
     /** @var int Position of next record in the result set, or null if no such record exist */
-    public $nextRecordPosition;
+    public $nextRecordPosition = null;
 
     /** @var string The CQL query used to generate the response */
-    public $query;
+    public $query = '';
 
     /**
      * Create a new searchRetrieve response
@@ -23,9 +23,13 @@ class SearchRetrieveResponse extends Response implements ResponseInterface
      * @param string $text Raw XML response
      * @param Client $client SRU client reference (optional)
      */
-    public function __construct($text, &$client = null)
+    public function __construct($text = null, &$client = null)
     {
         parent::__construct($text, $client);
+
+        if (is_null($this->response)) {
+            return;
+        }
 
         $this->numberOfRecords = (int) $this->response->text('/srw:searchRetrieveResponse/srw:numberOfRecords');
         $this->nextRecordPosition = (int) $this->response->text('/srw:searchRetrieveResponse/srw:nextRecordPosition') ?: null;

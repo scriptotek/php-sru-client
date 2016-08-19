@@ -1,5 +1,7 @@
 <?php namespace Scriptotek\Sru;
 
+use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
+
 /**
  * Explain response
  */
@@ -23,20 +25,28 @@ class ExplainResponse extends Response implements ResponseInterface
      * @param string $text Raw XML response
      * @param Client $client SRU client reference (optional)
      */
-    public function __construct($text, &$client = null)
+    public function __construct($text = null, &$client = null)
     {
         parent::__construct($text, $client);
 
         $this->indexes = array();
 
+        if (is_null($this->response)) {
+            return;
+        }
         $explain = $this->response->first('/srw:explainResponse/srw:record/srw:recordData/exp:explain');
         if (!$explain) {
             return;
         }
 
-        $serverInfo = $explain->first('exp:serverInfo');
-        $dbInfo = $explain->first('exp:databaseInfo');
-        $indexInfo = $explain->first('exp:indexInfo');
+        $this->parseExplainResponse($explain);
+    }
+
+    protected function parseExplainResponse(QuiteSimpleXMLElement $node)
+    {
+        $serverInfo = $node->first('exp:serverInfo');
+        $dbInfo = $node->first('exp:databaseInfo');
+        $indexInfo = $node->first('exp:indexInfo');
 
         $this->host = $serverInfo->text('exp:host');
         $this->port = (int) $serverInfo->text('exp:port');

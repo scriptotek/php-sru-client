@@ -12,7 +12,7 @@ interface ResponseInterface
      * @param Client $client SRU client reference (optional)
      * @return void
      */
-    public function __construct($text, &$client = null);
+    public function __construct($text = null, &$client = null);
 
     /**
      * Get the raw xml response
