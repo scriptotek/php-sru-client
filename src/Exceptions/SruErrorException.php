@@ -6,6 +6,7 @@ class SruErrorException extends \Exception
 
     /**
      * @param string $message
+     * @param string $uri
      */
     public function __construct($message, $uri)
     {
