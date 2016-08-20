@@ -6,7 +6,7 @@
 class SearchRetrieveResponse extends Response implements ResponseInterface
 {
     /** @var Record[] Array of records */
-    public $records = [];
+    public $records = array();
 
     /** @var int Total number of records in the result set */
     public $numberOfRecords = 0;

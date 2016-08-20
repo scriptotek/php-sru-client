@@ -70,8 +70,8 @@ class Records implements \Iterator
         $url = $this->client->urlTo($this->cql, $this->position, $this->count, $this->extraParams);
         $options = $this->client->getHttpOptions();
 
-        $res = $this->httpClient->get($url, $options)->send();
-        $body = $res->getBody(true);
+        $response = $this->httpClient->get($url, $options);
+        $body = (string) $response->getBody();
         $this->lastResponse = new SearchRetrieveResponse($body);
         $this->data = $this->lastResponse->records;
 

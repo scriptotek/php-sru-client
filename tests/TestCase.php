@@ -1,6 +1,6 @@
 <?php namespace Scriptotek\Sru;
 
-use Guzzle\Http\Message\Response as HttpResponse;
+use GuzzleHttp\Psr7\Response as HttpResponse;
 use Mockery as m;
 
 class TestCase extends \PHPUnit_Framework_TestCase
@@ -102,15 +102,10 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     protected function httpMockSingleResponse($response)
     {
-        $request = m::mock();
-        $request->shouldReceive('send')
-            ->once()
-            ->andReturn(new HttpResponse(200, array(), $response));
-
         $http = m::mock();
         $http->shouldReceive('get')
             ->once()
-            ->andReturn($request);
+            ->andReturn(new HttpResponse(200, array(), $response));
 
         return $http;
     }
@@ -120,15 +115,11 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     protected function httpMockListResponse($responses)
     {
-        $request = m::mock();
-        $request->shouldReceive('send')
-            ->andReturnValues(array_map(function ($r) {
-                return new HttpResponse(200, null, $r);
-            }, $responses));
-
         $http = m::mock();
         $http->shouldReceive('get')
-            ->andReturn($request);
+            ->andReturnValues(array_map(function ($r) {
+                return new HttpResponse(200, array(), $r);
+            }, $responses));
 
         return $http;
     }

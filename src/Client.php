@@ -1,6 +1,6 @@
 <?php namespace Scriptotek\Sru;
 
-use \Guzzle\Http\Client as HttpClient;
+use GuzzleHttp\Client as HttpClient;
 
 /**
  * SRU client
@@ -140,8 +140,8 @@ class Client
         $url = $this->urlTo($cql, $start, $count, $extraParams);
         $options = $this->getHttpOptions();
 
-        $res = $this->httpClient->get($url, $options)->send();
-        $body = $res->getBody(true);
+        $response = $this->httpClient->get($url, $options);
+        $body = (string) $response->getBody();
 
         return new SearchRetrieveResponse($body, $this);
     }
@@ -187,8 +187,8 @@ class Client
         ));
         $options = $this->getHttpOptions();
 
-        $res = $this->httpClient->get($url, $options)->send();
-        $body = $res->getBody(true);
+        $response = $this->httpClient->get($url, $options);
+        $body = (string) $response->getBody();
 
         return new ExplainResponse($body, $this);
     }

@@ -1,6 +1,6 @@
 <?php namespace Scriptotek\Sru;
 
-use Guzzle\Http\Message\Response as HttpResponse;
+use GuzzleHttp\Psr7\Response as HttpResponse;
 use Mockery as m;
 
 class ClientTest extends TestCase
@@ -50,16 +50,11 @@ class ClientTest extends TestCase
     {
         $credentials = array('secretuser', 'secretpass');
 
-        $request = m::mock();
-        $request->shouldReceive('send')
-            ->once()
-            ->andReturn(new HttpResponse(200, array(), $this->simple_response));
-
         $http = m::mock();
         $http->shouldReceive('get')
             ->with(m::any(), m::subset(array('auth' => $credentials)))
             ->once()
-            ->andReturn($request);
+            ->andReturn(new HttpResponse(200, array(), $this->simple_response));
 
         $options = array(
             'credentials' => $credentials
@@ -74,10 +69,10 @@ class ClientTest extends TestCase
     {
         $cql = 'dc.title="Joda jada isjda"';
 
-        $request = m::mock();
-        $request->shouldReceive('send')
+        $http = m::mock();
+        $http->shouldReceive('get')
             ->once()
-            ->andReturn(new HttpResponse(200, null, '<?xml version="1.0" encoding="UTF-8" ?>
+            ->andReturn(new HttpResponse(200, array(), '<?xml version="1.0" encoding="UTF-8" ?>
               <srw:searchRetrieveResponse
                 xmlns:srw="http://www.loc.gov/zing/srw/"
                 xmlns:xcql="http://www.loc.gov/zing/cql/xcql/"
@@ -113,18 +108,13 @@ class ClientTest extends TestCase
               </srw:searchRetrieveResponse>
             '));
 
-        $http = m::mock();
-        $http->shouldReceive('get')
-            ->once()
-            ->andReturn($request);
-
         $sru = new Client($this->url, null, $http);
         $response = $sru->search($cql);
         $this->assertCount(2, $response->records);
 
-        $request->shouldReceive('send')
+        $http->shouldReceive('get')
             ->once()
-            ->andReturn(new HttpResponse(200, null, '<?xml version="1.0" encoding="UTF-8" ?>
+            ->andReturn(new HttpResponse(200, array(), '<?xml version="1.0" encoding="UTF-8" ?>
               <srw:searchRetrieveResponse
                 xmlns:srw="http://www.loc.gov/zing/srw/"
                 xmlns:xcql="http://www.loc.gov/zing/cql/xcql/"

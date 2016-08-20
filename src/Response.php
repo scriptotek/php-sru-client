@@ -127,11 +127,11 @@ class Response implements ResponseInterface
         $this->rawResponse = $text;
 
         // Throws Danmichaelo\QuiteSimpleXMLElement\InvalidXMLException on invalid xml
-        $this->response = QuiteSimpleXMLElement::make($text, [
+        $this->response = QuiteSimpleXMLElement::make($text, array(
             'srw' => 'http://www.loc.gov/zing/srw/',
             'exp' => 'http://explain.z3950.org/dtd/2.0/',
             'd' => 'http://www.loc.gov/zing/srw/diagnostic/',
-        ]);
+        ));
 
         $this->version = $this->response->text('/srw:*/srw:version');
 
