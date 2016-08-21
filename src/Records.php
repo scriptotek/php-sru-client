@@ -1,6 +1,6 @@
 <?php namespace Scriptotek\Sru;
 
-use \Guzzle\Http\Client as HttpClient;
+use GuzzleHttp\Client as HttpClient;
 
 /**
  * When iterating, methods are called in the following order:
