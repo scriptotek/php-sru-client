@@ -7,6 +7,12 @@ use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
  */
 class Response implements ResponseInterface
 {
+    public static $nsPrefixes = array(
+        'srw' => 'http://www.loc.gov/zing/srw/',
+        'exp' => 'http://explain.z3950.org/dtd/2.0/',
+        'd' => 'http://www.loc.gov/zing/srw/diagnostic/',
+    );
+
     public static $errorMessages = array(
         'info:srw/diagnostic/1/1' => 'General system error',
         'info:srw/diagnostic/1/2' => 'System temporarily unavailable',
@@ -127,11 +133,7 @@ class Response implements ResponseInterface
         $this->rawResponse = $text;
 
         // Throws Danmichaelo\QuiteSimpleXMLElement\InvalidXMLException on invalid xml
-        $this->response = QuiteSimpleXMLElement::make($text, array(
-            'srw' => 'http://www.loc.gov/zing/srw/',
-            'exp' => 'http://explain.z3950.org/dtd/2.0/',
-            'd' => 'http://www.loc.gov/zing/srw/diagnostic/',
-        ));
+        $this->response = QuiteSimpleXMLElement::make($text, self::$nsPrefixes);
 
         $this->version = $this->response->text('/srw:*/srw:version');
 

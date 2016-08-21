@@ -19,12 +19,12 @@ class Record
     /** @var QuiteSimpleXMLElement */
     public $data;
 
-    static $recordTpl = '<srw:record xmlns:srw="http://www.loc.gov/zing/srw/">
-            <srw:recordSchema>{{recordSchema}}</srw:recordSchema>
-            <srw:recordPacking>{{recordPacking}}</srw:recordPacking>
-            <srw:recordPosition>{{position}}</srw:recordPosition>
-            <srw:recordData>{{data}}</srw:recordData>
-          </srw:record>';
+    static $recordTpl = '<s:record xmlns:s="http://www.loc.gov/zing/srw/">
+            <s:recordSchema>{{recordSchema}}</s:recordSchema>
+            <s:recordPacking>{{recordPacking}}</s:recordPacking>
+            <s:recordPosition>{{position}}</s:recordPosition>
+            <s:recordData>{{data}}</s:recordData>
+          </s:record>';
 
     /**
      * Create a new record
@@ -53,6 +53,6 @@ class Record
             self::$recordTpl
         );
 
-        return new Record(new QuiteSimpleXMLElement($record));
+        return new Record(QuiteSimpleXMLElement::make($record, Response::$nsPrefixes));
     }
 }
