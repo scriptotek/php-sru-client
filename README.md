@@ -5,83 +5,67 @@
 [![Latest Stable Version](http://img.shields.io/packagist/v/scriptotek/sru-client.svg?style=flat-square)](https://packagist.org/packages/scriptotek/sru-client)
 [![Total Downloads](http://img.shields.io/packagist/dt/scriptotek/sru-client.svg?style=flat-square)](https://packagist.org/packages/scriptotek/sru-client)
 
-## php-sru-client
+# php-sru-client
 
-Simple PHP package for making [Search/Retrieve via URL](http://www.loc.gov/standards/sru/) (SRU) requests, using the 
-[Guzzle HTTP client](http://guzzlephp.org/)
-and returning 
+Simple PHP package for making [Search/Retrieve via URL](http://www.loc.gov/standards/sru/) (SRU) requests, using the [Guzzle HTTP client](http://guzzlephp.org/) and returning
 [QuiteSimpleXMLElement](//github.com/danmichaelo/quitesimplexmlelement) instances. Includes an iterator to easily iterate over search results, abstracting away the process of making multiple requests.
 
 If you prefer a simple text response, you might have a look at
 the [php-sru-search](https://github.com/Zeitschriftendatenbank/php-sru-search) package.
 
-### Install using Composer
+## Install using Composer
 
-Add the package to the `require` list of your `composer.json` file.
+Make sure you have [Composer](https://getcomposer.org) installed, then run
 
-```json
-{
-    "require": {
-        "scriptotek/sru-client": "dev-master"
-    },
-}
+```bash
+composer require scriptotek/alma-client
 ```
 
-and run `composer install` to get the latest version of the package.
+in your project directory to get the latest stable version of the package.
 
-### Laravel 5 integration
-
-In the $providers array add the service providers for this package:
-
-    Scriptotek\Sru\Providers\SruServiceProvider::class,
-
-Add the facade of this package to the `$aliases` array:
-
-    'SruClient' => Scriptotek\Sru\Facades\SruClient::class,
-
-Publish configuration in Laravel 5:
-
-    $ php artisan vendor:publish --provider="Scriptotek\Sru\Providers\SruServiceProvider"
-
-The configuration file is copied to `config/sru.php`.
-
-### Example
+## Configuring the client
 
 ```php
 require_once('vendor/autoload.php');
 use Scriptotek\Sru\Client as SruClient;
 
-$url = 'http://sru.bibsys.no/search/biblioholdings';
-
-$client = new SruClient($url, array(
+$sru = new SruClient('http://bibsys-network.alma.exlibrisgroup.com/view/sru/47BIBSYS_NETWORK', [
     'schema' => 'marcxml',
-    'version' => '1.1',
-    'user-agent' => 'MyTool/0.1'
-));
+    'version' => '1.2',
+    'user-agent' => 'MyTool/0.1',
+]);
 ```
 
-To get the first record matching a query:
-```php
-$client->first('bs.isbn="0415919118"');
-```
-The result is a [Record](//scriptotek.github.io/php-sru-client/api_docs/Scriptotek/Sru/Record.html)
-object, or `null` if not found.
+## Search and retrieve
 
-To iterate over all the results from a `searchRetrieve` query, use the [Records](//scriptotek.github.io/php-sru-client/api_docs/Scriptotek/Sru/Records.html) object returned from `Client::records()`. The first argument is
-the CQL query, and the second optional argument is the number of records to fetch for each request (defaults to 10).
+To get all the records matching a given CQL query:
 
 ```php
-$records = $client->records('dc.title="Hello world"');
-if ($records->error) {
-	print 'ERROR: ' . $records->error . "\n";
-}
+$records = $sru->all('alma.title="Hello world"');
 foreach ($records as $record) {
 	echo "Got record " . $record->position . " of " . $records->numberOfRecords() . "\n";
 	// processRecord($record->data);
 }
 ```
 
-#### Use explain to get information about servers:
+where `$record` is an instance of [Record](//scriptotek.github.io/php-sru-client/api_docs/Scriptotek/Sru/Record.html) and `$record->data` is an instance of [QuiteSimpleXMLElement](https://github.com/danmichaelo/quitesimplexmlelement).
+
+The `all()` method takes care of continuation for you under the hood for you;
+the [Records](//scriptotek.github.io/php-sru-client/api_docs/Scriptotek/Sru/Records.html) generator
+continues to fetch records until the result set is depleted. A default batch size of 10 is used,
+but you can give any number supported by the server as a second argument to the `all()` method.
+
+If you query for some identifier, you can use the convenience method `first()`:
+
+```php
+$record = $sru->first('alma.isbn="0415919118"');
+```
+
+The result is a [Record](//scriptotek.github.io/php-sru-client/api_docs/Scriptotek/Sru/Record.html)
+object, or `null` if not found.
+
+
+## Use explain to get information about servers
 
 ```php
 $urls = array(
@@ -93,15 +77,15 @@ $urls = array(
 
 foreach ($urls as $url) {
 
-    $client = new SruClient($url, array(
+    $sru = new SruClient($url, [
         'version' => '1.1',
         'user-agent' => 'MyTool/0.1'
-    ));
+    ]);
 
-    $response = $client->explain();
-
-    if ($response->error) {
-        print 'ERROR: ' . $response->error . "\n";
+    try {
+        $response = $sru->explain();
+    } catch (\Scriptotek\Sru\Exceptions\SruErrorException $e)
+        print 'ERROR: ' . $e->getMessage() . "\n";
         continue;
     }
 
@@ -117,7 +101,7 @@ foreach ($urls as $url) {
 }
 ```
 
-### API documentation 
+## API documentation
 
 API documentation can be generated using e.g. [Sami](https://github.com/fabpot/sami),
 which is included in the dev requirements of `composer.json`.
@@ -125,3 +109,20 @@ which is included in the dev requirements of `composer.json`.
     php vendor/bin/sami.php update sami.config.php -v
 
 You can view it at [scriptotek.github.io/php-sru-client](//scriptotek.github.io/php-sru-client/)
+
+## Laravel 5 integration
+
+In the $providers array add the service providers for this package:
+
+    Scriptotek\Sru\Providers\SruServiceProvider::class,
+
+Add the facade of this package to the `$aliases` array:
+
+    'SruClient' => Scriptotek\Sru\Facades\SruClient::class,
+
+Publish configuration in Laravel 5:
+
+    $ php artisan vendor:publish --provider="Scriptotek\Sru\Providers\SruServiceProvider"
+
+The configuration file is copied to `config/sru.php`.
+

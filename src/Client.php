@@ -129,6 +129,7 @@ class Client
     /**
      * Perform a searchRetrieve request
      *
+     * @deprecated
      * @param string $cql
      * @param int $start Start value in result set (optional)
      * @param int $count Number of records to request (optional)
@@ -150,14 +151,23 @@ class Client
      * Perform a searchRetrieve request and return an iterator over the records
      *
      * @param string $cql
-     * @param int $count Number of records to request per request
+     * @param int $batchSize Number of records to request per request
      * @param array $extraParams Extra GET parameters
      * @param mixed $httpClient A http client
      * @return Records
      */
-    public function records($cql, $count = 10, $extraParams = array(), $httpClient = null)
+    public function all($cql, $batchSize = 10, $extraParams = array(), $httpClient = null)
     {
-        return new Records($cql, $this, $count, $extraParams, $httpClient);
+        return new Records($cql, $this, $batchSize, $extraParams, $httpClient);
+    }
+
+    /**
+     * Alias for `all()`
+     * @deprecated
+     */
+    public function records($cql, $batchSize = 10, $extraParams = array(), $httpClient = null)
+    {
+        return $this->all($cql, $batchSize = 10, $extraParams = array(), $httpClient);
     }
 
     /**
