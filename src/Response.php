@@ -11,6 +11,7 @@ class Response implements ResponseInterface
         'srw' => 'http://www.loc.gov/zing/srw/',
         'exp' => 'http://explain.z3950.org/dtd/2.0/',
         'd' => 'http://www.loc.gov/zing/srw/diagnostic/',
+        'marc' => 'http://www.loc.gov/MARC21/slim',
     );
 
     public static $errorMessages = array(
