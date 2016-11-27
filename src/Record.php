@@ -19,7 +19,7 @@ class Record
     /** @var QuiteSimpleXMLElement */
     public $data;
 
-    static $recordTpl = '<s:record xmlns:s="http://www.loc.gov/zing/srw/">
+    static public $recordTpl = '<s:record xmlns:s="http://www.loc.gov/zing/srw/">
             <s:recordSchema>{{recordSchema}}</s:recordSchema>
             <s:recordPacking>{{recordPacking}}</s:recordPacking>
             <s:recordPosition>{{position}}</s:recordPosition>

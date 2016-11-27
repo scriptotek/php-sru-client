@@ -164,10 +164,15 @@ class Client
     /**
      * Alias for `all()`
      * @deprecated
+     * @param $cql
+     * @param int $batchSize
+     * @param array $extraParams
+     * @param null $httpClient
+     * @return Records
      */
     public function records($cql, $batchSize = 10, $extraParams = array(), $httpClient = null)
     {
-        return $this->all($cql, $batchSize = 10, $extraParams = array(), $httpClient);
+        return $this->all($cql, $batchSize, $extraParams, $httpClient);
     }
 
     /**
