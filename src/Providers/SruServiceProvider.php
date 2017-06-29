@@ -7,7 +7,6 @@ use Scriptotek\Sru\Client as SruClient;
 
 class SruServiceProvider extends ServiceProvider
 {
-
     /**
      * Bootstrap the application events.
      *
@@ -27,15 +26,13 @@ class SruServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $app = $this->app;
         $this->mergeConfigFrom(
             __DIR__.'/../../config/config.php',
             'sru'
         );
-        $app['sru-client'] = $app->share(function ($app) {
+        $this->app->singleton(SruClient::class, function ($app) {
             return new SruClient($app['config']->get('sru.endpoint'), $app['config']->get('sru'));
         });
-        $app->alias('sru-client', SruClient::class);
     }
 
     /**
@@ -45,6 +42,6 @@ class SruServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array('sru-client');
+        return [SruClient::class];
     }
 }
