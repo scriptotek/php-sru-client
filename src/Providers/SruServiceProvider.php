@@ -8,6 +8,13 @@ use Scriptotek\Sru\Client as SruClient;
 class SruServiceProvider extends ServiceProvider
 {
     /**
+     * Indicates if loading of the provider is deferred.
+     *
+     * @var bool
+     */
+    protected $defer = true;
+
+    /**
      * Bootstrap the application events.
      *
      * @return void
