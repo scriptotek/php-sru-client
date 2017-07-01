@@ -163,12 +163,11 @@ class Client
      * @param string $cql
      * @param int $batchSize Number of records to request per request
      * @param array $extraParams Extra GET parameters
-     * @param mixed $httpClient A http client
      * @return Records
      */
-    public function all($cql, $batchSize = 10, $extraParams = array(), $httpClient = null)
+    public function all($cql, $batchSize = 10, $extraParams = array())
     {
-        return new Records($cql, $this, $batchSize, $extraParams, $httpClient);
+        return new Records($cql, $this, $batchSize, $extraParams);
     }
 
     /**
@@ -177,12 +176,11 @@ class Client
      * @param $cql
      * @param int $batchSize
      * @param array $extraParams
-     * @param null $httpClient
      * @return Records
      */
-    public function records($cql, $batchSize = 10, $extraParams = array(), $httpClient = null)
+    public function records($cql, $batchSize = 10, $extraParams = array())
     {
-        return $this->all($cql, $batchSize, $extraParams, $httpClient);
+        return $this->all($cql, $batchSize, $extraParams);
     }
 
     /**
@@ -190,12 +188,11 @@ class Client
      *
      * @param string $cql
      * @param array $extraParams Extra GET parameters
-     * @param mixed $httpClient A http client
      * @return Record
      */
-    public function first($cql, $extraParams = array(), $httpClient = null)
+    public function first($cql, $extraParams = array())
     {
-        $recs = new Records($cql, $this, 1, $extraParams, $httpClient);
+        $recs = new Records($cql, $this, 1, $extraParams);
         return $recs->numberOfRecords() ? $recs->current() : null;
     }
 
