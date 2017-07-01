@@ -24,6 +24,16 @@ composer require scriptotek/php-sru-client
 
 in your project directory to get the latest stable version of the package.
 
+**You also need a HTTP library**. If you're not already using one in your project,
+just add Guzzle:
+
+```bash
+composer require php-http/guzzle6-adapter
+```
+
+[HTTPlug discovery](http://php-http.readthedocs.io/en/latest/discovery.html) is
+used in order to not depend on a specific library.
+
 ## Configuring the client
 
 ```php
@@ -113,17 +123,15 @@ You can view it at [scriptotek.github.io/php-sru-client](//scriptotek.github.io/
 
 ## Laravel 5 integration
 
-In the $providers array add the service providers for this package:
+Add the service provider to the `'providers'` array in `config/app.php`:
 
     Scriptotek\Sru\Providers\SruServiceProvider::class,
 
-Add the facade of this package to the `$aliases` array:
+Optionally, add the facade to the `'aliases'` array in the same file:
 
-    'SruClient' => Scriptotek\Sru\Facades\SruClient::class,
+    'SruClient'      => Scriptotek\Sru\Facades\SruClient::class,
 
-Publish configuration in Laravel 5:
+To create the configuration file `config/sru.php`:
 
     $ php artisan vendor:publish --provider="Scriptotek\Sru\Providers\SruServiceProvider"
-
-The configuration file is copied to `config/sru.php`.
 

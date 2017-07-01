@@ -1,7 +1,9 @@
 <?php namespace Scriptotek\Sru;
 
 use GuzzleHttp\Psr7\Response as HttpResponse;
+use function GuzzleHttp\Psr7\stream_for;
 use Mockery as m;
+use Http\Mock\Client as MockHttp;
 
 class ClientTest extends TestCase
 {
@@ -37,7 +39,7 @@ class ClientTest extends TestCase
 
     public function testSearch()
     {
-        $http = $this->httpMockSingleResponse($this->simple_response);
+        $http = $this->httpMockWithResponses($this->simple_response);
         $sru = new Client($this->url, null, $http);
 
         $this->assertXmlStringEqualsXmlString(
@@ -46,76 +48,60 @@ class ClientTest extends TestCase
         );
     }
 
-    public function testSearchWithAuth()
-    {
-        $credentials = array('secretuser', 'secretpass');
-
-        $http = m::mock();
-        $http->shouldReceive('get')
-            ->with(m::any(), m::subset(array('auth' => $credentials)))
-            ->once()
-            ->andReturn(new HttpResponse(200, array(), $this->simple_response));
-
-        $options = array(
-            'credentials' => $credentials
-        );
-        $sru = new Client($this->url, $options, $http);
-
-        $r = $sru->search('test');
-        $this->assertInstanceOf('Scriptotek\Sru\SearchRetrieveResponse', $r);
-    }
-
     public function testNext()
     {
         $cql = 'dc.title="Joda jada isjda"';
 
-        $http = m::mock();
-        $http->shouldReceive('get')
-            ->once()
-            ->andReturn(new HttpResponse(200, array(), '<?xml version="1.0" encoding="UTF-8" ?>
-              <srw:searchRetrieveResponse
-                xmlns:srw="http://www.loc.gov/zing/srw/"
-                xmlns:xcql="http://www.loc.gov/zing/cql/xcql/"
-              >
-                <srw:version>1.1</srw:version>
-                <srw:numberOfRecords>3</srw:numberOfRecords>
-                <srw:records>
-                  <srw:record>
-                    <srw:recordSchema>marcxchange</srw:recordSchema>
-                    <srw:recordPacking>xml</srw:recordPacking>
-                    <srw:recordPosition>1</srw:recordPosition>
-                    <srw:recordData>Record 1</srw:recordData>
-                  </srw:record>
-                  <srw:record>
-                    <srw:recordSchema>marcxchange</srw:recordSchema>
-                    <srw:recordPacking>xml</srw:recordPacking>
-                    <srw:recordPosition>2</srw:recordPosition>
-                    <srw:recordData>Record 2</srw:recordData>
-                  </srw:record>
-                </srw:records>
-                <srw:nextRecordPosition>3</srw:nextRecordPosition>
-                <srw:echoedSearchRetrieveRequest>
-                  <srw:operation>searchRetrieve</srw:operation>
-                  <srw:version>1.1</srw:version>
-                  <srw:query>' . $cql . '</srw:query>
-                  <srw:startRecord>1</srw:startRecord>
-                  <srw:maximumRecords>2</srw:maximumRecords>
-                  <srw:recordSchema>marcxchange</srw:recordSchema>
-                </srw:echoedSearchRetrieveRequest>
-                <srw:extraResponseData>
-                  <responseDate>2014-03-28T12:09:50Z</responseDate>
-                </srw:extraResponseData>
-              </srw:searchRetrieveResponse>
-            '));
+        $http = new MockHttp();
+        $http->addResponse(
+            (new HttpResponse())
+                ->withBody(stream_for('<?xml version="1.0" encoding="UTF-8" ?>
+                      <srw:searchRetrieveResponse
+                        xmlns:srw="http://www.loc.gov/zing/srw/"
+                        xmlns:xcql="http://www.loc.gov/zing/cql/xcql/"
+                      >
+                        <srw:version>1.1</srw:version>
+                        <srw:numberOfRecords>3</srw:numberOfRecords>
+                        <srw:records>
+                          <srw:record>
+                            <srw:recordSchema>marcxchange</srw:recordSchema>
+                            <srw:recordPacking>xml</srw:recordPacking>
+                            <srw:recordPosition>1</srw:recordPosition>
+                            <srw:recordData>Record 1</srw:recordData>
+                          </srw:record>
+                          <srw:record>
+                            <srw:recordSchema>marcxchange</srw:recordSchema>
+                            <srw:recordPacking>xml</srw:recordPacking>
+                            <srw:recordPosition>2</srw:recordPosition>
+                            <srw:recordData>Record 2</srw:recordData>
+                          </srw:record>
+                        </srw:records>
+                        <srw:nextRecordPosition>3</srw:nextRecordPosition>
+                        <srw:echoedSearchRetrieveRequest>
+                          <srw:operation>searchRetrieve</srw:operation>
+                          <srw:version>1.1</srw:version>
+                          <srw:query>\' . $cql . \'</srw:query>
+                          <srw:startRecord>1</srw:startRecord>
+                          <srw:maximumRecords>2</srw:maximumRecords>
+                          <srw:recordSchema>marcxchange</srw:recordSchema>
+                        </srw:echoedSearchRetrieveRequest>
+                        <srw:extraResponseData>
+                          <responseDate>2014-03-28T12:09:50Z</responseDate>
+                        </srw:extraResponseData>
+                      </srw:searchRetrieveResponse>
+                    ')
+                )
+        );
 
         $sru = new Client($this->url, null, $http);
         $response = $sru->search($cql);
         $this->assertCount(2, $response->records);
 
-        $http->shouldReceive('get')
-            ->once()
-            ->andReturn(new HttpResponse(200, array(), '<?xml version="1.0" encoding="UTF-8" ?>
-              <srw:searchRetrieveResponse
+
+        $http->addResponse(
+            (new HttpResponse())
+                ->withBody(stream_for('<?xml version="1.0" encoding="UTF-8" ?>
+                    <srw:searchRetrieveResponse
                 xmlns:srw="http://www.loc.gov/zing/srw/"
                 xmlns:xcql="http://www.loc.gov/zing/cql/xcql/"
               >
@@ -141,7 +127,8 @@ class ClientTest extends TestCase
                   <responseDate>2014-03-28T12:09:50Z</responseDate>
                 </srw:extraResponseData>
               </srw:searchRetrieveResponse>
-            '));
+            '))
+        );
 
         $response = $response->next();
         $this->assertCount(1, $response->records);
@@ -150,35 +137,31 @@ class ClientTest extends TestCase
         $this->assertNull($response);
     }
 
-    public function testHttpOptions()
+    public function testHttpHeaders()
     {
         $sru1 = new Client($this->url, array(
             'user-agent' => 'Blablabla/0.1',
-            'credentials' => array('myuser', 'mypass'),
-            'proxy' => 'proxyhost:80'
         ));
 
-        $opts = $sru1->getHttpOptions();
+        $opts = $sru1->getHttpHeaders();
 
-        $this->assertEquals('application/xml', $opts['headers']['Accept']);
-        $this->assertEquals('Blablabla/0.1', $opts['headers']['User-Agent']);
-        $this->assertEquals(array('myuser', 'mypass'), $opts['auth']);
-        $this->assertEquals('proxyhost:80', $opts['proxy']);
+        $this->assertEquals('application/xml', $opts['Accept']);
+        $this->assertEquals('Blablabla/0.1', $opts['User-Agent']);
     }
 
     public function testRecords()
     {
-        $http = $this->httpMockSingleResponse($this->makeDummyResponse(1));
+        $http = $this->httpMockWithResponses($this->makeDummyResponse(1));
 
-        $sru1 = new Client($this->url);
-        $r = $sru1->records('test', 1, array(), $http);
+        $sru1 = new Client($this->url, [], $http);
+        $r = $sru1->records('test', 1);
 
         $this->assertInstanceOf('Scriptotek\Sru\Records', $r);
     }
 
     public function testExplain()
     {
-        $http = $this->httpMockSingleResponse($this->simple_explain_response);
+        $http = $this->httpMockWithResponses($this->simple_explain_response);
         $sru = new Client($this->url, null, $http);
         $exp = $sru->explain();
 

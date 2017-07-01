@@ -1,6 +1,13 @@
 <?php namespace Scriptotek\Sru;
 
-use GuzzleHttp\Client as HttpClient;
+use Http\Client\Common\Plugin\AuthenticationPlugin;
+use Http\Client\Common\PluginClient;
+use Http\Client\HttpClient;
+use Http\Discovery\HttpClientDiscovery;
+use Http\Client\Common\Plugin\ErrorPlugin;
+use Http\Discovery\MessageFactoryDiscovery;
+use Http\Message\Authentication\BasicAuth;
+use Http\Message\MessageFactory;
 
 /**
  * SRU client
@@ -9,6 +16,9 @@ class Client
 {
     /** @var HttpClient */
     protected $httpClient;
+
+    /** @var MessageFactory */
+    protected $messageFactory;
 
     /** @var string SRU service base URL */
     protected $url;
@@ -38,15 +48,22 @@ class Client
     /**
      * Create a new client
      *
-     * @param string $url Base URL to the SRU service
-     * @param array $options Associative array of options
-     * @param HttpClient $httpClient
+     * @param string              $url     Base URL to the SRU service
+     * @param array               $options Associative array of options
+     * @param HttpClient          $httpClient
+     * @param MessageFactory|null $messageFactory
+     * @throws \ErrorException
      */
-    public function __construct($url, $options = null, $httpClient = null)
-    {
+    public function __construct(
+        $url,
+        $options = null,
+        HttpClient $httpClient = null,
+        MessageFactory $messageFactory = null
+    ) {
         $this->url = $url;
         $options = $options ?: array();
-        $this->httpClient = $httpClient ?: new HttpClient;
+
+        $plugins = [new ErrorPlugin()];
 
         $this->schema = isset($options['schema'])
             ? $options['schema']
@@ -60,13 +77,17 @@ class Client
             ? $options['user-agent']
             : null;
 
-        $this->credentials = isset($options['credentials'])
-            ? $options['credentials']
-            : null;
+        if (isset($options['credentials'])) {
+            $authentication = new BasicAuth($options['credentials'][0], $options['credentials'][1]);
+            $plugins[] = new AuthenticationPlugin($authentication);
+        }
 
-        $this->proxy = isset($options['proxy'])
-            ? $options['proxy']
-            : null;
+        if (isset($options['proxy'])) {
+            throw new\ErrorException('Not supported');
+        }
+
+        $this->httpClient = new PluginClient($httpClient ?: HttpClientDiscovery::find(), $plugins);
+        $this->messageFactory = $messageFactory ?: MessageFactoryDiscovery::find();
     }
 
     /**
@@ -106,7 +127,7 @@ class Client
      *
      * @return array
      */
-    public function getHttpOptions()
+    public function getHttpHeaders()
     {
         $headers = array(
             'Accept' => 'application/xml'
@@ -114,16 +135,8 @@ class Client
         if ($this->userAgent) {
             $headers['User-Agent'] = $this->userAgent;
         }
-        $options = array(
-            'headers' => $headers
-        );
-        if ($this->credentials) {
-            $options['auth'] = $this->credentials;
-        }
-        if ($this->proxy) {
-            $options['proxy'] = $this->proxy;
-        }
-        return $options;
+
+        return $headers;
     }
 
     /**
@@ -139,10 +152,7 @@ class Client
     public function search($cql, $start = 1, $count = 10, $extraParams = array())
     {
         $url = $this->urlTo($cql, $start, $count, $extraParams);
-        $options = $this->getHttpOptions();
-
-        $response = $this->httpClient->get($url, $options);
-        $body = (string) $response->getBody();
+        $body = $this->request('GET', $url);
 
         return new SearchRetrieveResponse($body, $this);
     }
@@ -200,11 +210,22 @@ class Client
             'operation' => 'explain',
             'version' => $this->version,
         ));
-        $options = $this->getHttpOptions();
 
-        $response = $this->httpClient->get($url, $options);
-        $body = (string) $response->getBody();
+        $body = $this->request('GET', $url);
 
         return new ExplainResponse($body, $this);
+    }
+
+    /**
+     * @param string $method
+     * @param string $url
+     * @return string
+     */
+    public function request($method, $url)
+    {
+        $request = $this->messageFactory->createRequest($method, $url, $this->getHttpHeaders());
+        $response = $this->httpClient->sendRequest($request);
+
+        return (string) $response->getBody();
     }
 }

@@ -1,7 +1,8 @@
 <?php namespace Scriptotek\Sru;
 
 use GuzzleHttp\Psr7\Response as HttpResponse;
-use Mockery as m;
+use function GuzzleHttp\Psr7\stream_for;
+use Http\Mock\Client as MockHttp;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {
@@ -98,28 +99,20 @@ class TestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Return a single response (no matter what request)
-     */
-    protected function httpMockSingleResponse($response)
-    {
-        $http = m::mock();
-        $http->shouldReceive('get')
-            ->once()
-            ->andReturn(new HttpResponse(200, array(), $response));
-
-        return $http;
-    }
-
-    /**
      * Returns a series of responses (no matter what request)
      */
-    protected function httpMockListResponse($responses)
+    protected function httpMockWithResponses($bodies)
     {
-        $http = m::mock();
-        $http->shouldReceive('get')
-            ->andReturnValues(array_map(function ($r) {
-                return new HttpResponse(200, array(), $r);
-            }, $responses));
+        if (!is_array($bodies)) {
+            $bodies = [$bodies];
+        }
+        $http = new MockHttp();
+        foreach ($bodies as $body) {
+            $http->addResponse(
+                (new HttpResponse())
+                    ->withBody(stream_for($body))
+            );
+        }
 
         return $http;
     }

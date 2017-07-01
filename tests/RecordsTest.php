@@ -1,7 +1,5 @@
 <?php namespace Scriptotek\Sru;
 
-use Mockery as m;
-
 class RecordsTest extends TestCase
 {
     public function testIterating()
@@ -10,10 +8,10 @@ class RecordsTest extends TestCase
         $uri = 'http://localhost';
         $n = 8;
         $response = $this->makeDummyResponse($n);
-        $http = $this->httpMockSingleResponse($response);
+        $http = $this->httpMockWithResponses([$response, $response]);
 
-        $client = new Client($uri);
-        $records = new Records($cql, $client, 10, array(), $http);
+        $client = new Client($uri, [], $http);
+        $records = new Records($cql, $client, 10);
         $this->assertEquals(8, $records->numberOfRecords());
         $records->rewind();
 
@@ -42,13 +40,13 @@ class RecordsTest extends TestCase
         // Result set contains two records
         $response = $this->makeDummyResponse(2, array('maxRecords' => 1));
 
-        $http = $this->httpMockSingleResponse($response);
+        $http = $this->httpMockWithResponses([$response, $response]);
         $uri = 'http://localhost';
         $cql = 'dummy';
 
         // Request only one record in each request
-        $client = new Client($uri);
-        $rec = new Records($cql, $client, 1, array(), $http);
+        $client = new Client($uri, [], $http);
+        $rec = new Records($cql, $client, 1);
 
         // Jumping to position 2 should call fetchMore() and throw
         // an InvalidResponseException on getting the same response
@@ -67,12 +65,12 @@ class RecordsTest extends TestCase
             $this->makeDummyResponse($nrecs, array('startRecord' => 5, 'maxRecords' => 2))
         );
 
-        $http = $this->httpMockListResponse($responses);
+        $http = $this->httpMockWithResponses($responses);
         $uri = 'http://localhost';
         $cql = 'dummy';
 
-        $client = new Client($uri);
-        $records = new Records($cql, $client, 10, array(), $http);
+        $client = new Client($uri, [], $http);
+        $records = new Records($cql, $client, 10);
 
         $records->rewind();
         foreach (range(1, $nrecs) as $n) {

@@ -1,7 +1,5 @@
 <?php namespace Scriptotek\Sru;
 
-use GuzzleHttp\Client as HttpClient;
-
 /**
  * When iterating, methods are called in the following order:
  *
@@ -20,9 +18,6 @@ use GuzzleHttp\Client as HttpClient;
  */
 class Records implements \Iterator
 {
-    /** @var HttpClient */
-    protected $httpClient;
-
     private $position;
     private $count;
     private $extraParams;
@@ -39,15 +34,13 @@ class Records implements \Iterator
      * @param Client $client SRU client reference (optional)
      * @param int $count Number of records to request per request
      * @param array $extraParams Extra GET parameters
-     * @param mixed $httpClient A http client
      */
-    public function __construct($cql, Client $client, $count = 10, $extraParams = array(), $httpClient = null)
+    public function __construct($cql, Client $client, $count = 10, $extraParams = array())
     {
         $this->position = 1;
         $this->count = $count; // number of records per request
         $this->extraParams = $extraParams;
         $this->cql = $cql;
-        $this->httpClient = $httpClient ?: new HttpClient;
         $this->client = $client;
         $this->fetchMore();
     }
@@ -68,10 +61,7 @@ class Records implements \Iterator
     private function fetchMore()
     {
         $url = $this->client->urlTo($this->cql, $this->position, $this->count, $this->extraParams);
-        $options = $this->client->getHttpOptions();
-
-        $response = $this->httpClient->get($url, $options);
-        $body = (string) $response->getBody();
+        $body = $this->client->request('GET', $url);
         $this->lastResponse = new SearchRetrieveResponse($body);
         $this->data = $this->lastResponse->records;
 
