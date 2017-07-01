@@ -13,6 +13,6 @@ class SruClient extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'sru-client';
+        return \Scriptotek\Sru\Client::class;
     }
 }
