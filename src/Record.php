@@ -55,4 +55,21 @@ class Record
 
         return new Record(QuiteSimpleXMLElement::make($record, Response::$nsPrefixes));
     }
+
+    /**
+     * Get the record data as a string.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        $nodes = $this->data->xpath('./child::*');
+        if (count($nodes) == 1) {
+            return $nodes[0]->asXML();
+        } elseif (count($nodes) > 1) {
+            throw new \RuntimeException('recordData contains more than one node!');
+        }
+
+        return $this->data->text();
+    }
 }
