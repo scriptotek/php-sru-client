@@ -32,6 +32,9 @@ class Client
     /** @var string Some user agent string to identify our client */
     protected $userAgent;
 
+    /** @var array Custom headers */
+    protected $headers;
+
     /**
      * @var string|string[] Proxy configuration details.
      *
@@ -73,9 +76,14 @@ class Client
             ? $options['version']
             : '1.1';
 
-        $this->userAgent = isset($options['user-agent'])
-            ? $options['user-agent']
-            : null;
+        $this->headers = isset($options['headers'])
+            ? $options['headers']
+            : ['Accept' => 'application/xml'];
+
+        if (isset($options['user-agent'])) {
+            // legacy option
+            $this->headers['User-Agent'] = $options['user-agent'];
+        }
 
         if (isset($options['credentials'])) {
             $authentication = new BasicAuth($options['credentials'][0], $options['credentials'][1]);
@@ -120,23 +128,6 @@ class Client
         }
 
         return $this->url . '?' . http_build_query($qs);
-    }
-
-    /**
-     * Get HTTP client configuration options (authentication, proxy, headers)
-     *
-     * @return array
-     */
-    public function getHttpHeaders()
-    {
-        $headers = array(
-            'Accept' => 'application/xml'
-        );
-        if ($this->userAgent) {
-            $headers['User-Agent'] = $this->userAgent;
-        }
-
-        return $headers;
     }
 
     /**
@@ -220,7 +211,7 @@ class Client
      */
     public function request($method, $url)
     {
-        $request = $this->messageFactory->createRequest($method, $url, $this->getHttpHeaders());
+        $request = $this->messageFactory->createRequest($method, $url, $this->headers);
         $response = $this->httpClient->sendRequest($request);
 
         return (string) $response->getBody();
