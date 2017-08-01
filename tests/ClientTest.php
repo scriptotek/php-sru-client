@@ -143,7 +143,7 @@ class ClientTest extends TestCase
             'user-agent' => 'Blablabla/0.1',
         ));
 
-        $opts = $sru1->getHttpHeaders();
+        $opts = $sru1->headers;
 
         $this->assertEquals('application/xml', $opts['Accept']);
         $this->assertEquals('Blablabla/0.1', $opts['User-Agent']);

@@ -4,6 +4,7 @@ use Http\Client\Common\Plugin\AuthenticationPlugin;
 use Http\Client\Common\PluginClient;
 use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
+use Http\Client\Common\Exception\ServerErrorException;
 use Http\Client\Common\Plugin\ErrorPlugin;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\Authentication\BasicAuth;
@@ -33,7 +34,7 @@ class Client
     protected $userAgent;
 
     /** @var array Custom headers */
-    protected $headers;
+    public $headers;
 
     /**
      * @var string|string[] Proxy configuration details.
@@ -66,7 +67,7 @@ class Client
         $this->url = $url;
         $options = $options ?: array();
 
-        $plugins = [new ErrorPlugin()];
+        $plugins = [];
 
         $this->schema = isset($options['schema'])
             ? $options['schema']
@@ -213,6 +214,10 @@ class Client
     {
         $request = $this->messageFactory->createRequest($method, $url, $this->headers);
         $response = $this->httpClient->sendRequest($request);
+
+        if ($response->getStatusCode() >= 500 && $response->getStatusCode() < 600) {
+            throw new ServerErrorException($response->getReasonPhrase(), $request, $response);
+        }
 
         return (string) $response->getBody();
     }
