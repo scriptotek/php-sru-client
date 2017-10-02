@@ -19,7 +19,7 @@ the [php-sru-search](https://github.com/Zeitschriftendatenbank/php-sru-search) p
 Make sure you have [Composer](https://getcomposer.org) installed, then run
 
 ```bash
-composer require scriptotek/php-sru-client
+composer require scriptotek/sru-client
 ```
 
 in your project directory to get the latest stable version of the package.
