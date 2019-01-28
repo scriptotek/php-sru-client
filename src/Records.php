@@ -115,7 +115,7 @@ class Records implements \Iterator
         ++$this->position;
 
         if ($this->position > $this->numberOfRecords()) {
-            return null;
+            return;
         }
 
         if (count($this->data) == 0) {
@@ -123,7 +123,7 @@ class Records implements \Iterator
         }
 
         if (count($this->data) == 0) {
-            return null;
+            return;
         }
     }
 
