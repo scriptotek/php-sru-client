@@ -48,7 +48,7 @@ class Records implements \Iterator
     /**
      * Return the number of records
      *
-     * @return int|null
+     * @return int
      */
     public function numberOfRecords()
     {
