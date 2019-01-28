@@ -75,7 +75,7 @@ class Records implements \Iterator
     /**
      * Return the current element
      *
-     * @return mixed
+     * @return Record
      */
     public function current()
     {
