@@ -8,15 +8,17 @@
 
 # php-sru-client
 
-Simple PHP package for making [Search/Retrieve via URL](http://www.loc.gov/standards/sru/) (SRU) requests, using the [Guzzle HTTP client](http://guzzlephp.org/) and returning
-[QuiteSimpleXMLElement](//github.com/danmichaelo/quitesimplexmlelement) instances. Includes an iterator to easily iterate over search results, abstracting away the process of making multiple requests.
+Simple PHP package for making [Search/Retrieve via URL](http://www.loc.gov/standards/sru/) (SRU) requests and returning
+[QuiteSimpleXMLElement](//github.com/danmichaelo/quitesimplexmlelement) objects.
+The response object is an iterator, to support easy iteration over the results,
+abstracting away the process of making multiple requests.
 
 If you prefer a simple text response, you might have a look at
 the [php-sru-search](https://github.com/Zeitschriftendatenbank/php-sru-search) package.
 
 ## Install using Composer
 
-Use [Composer](https://getcomposer.org) to install sru-client with a compatible HTTP library such as Guzzle:
+Use [Composer](https://getcomposer.org) to install sru-client with a HTTP library such as Guzzle:
 
 ```bash
 composer require scriptotek/sru-client php-http/guzzle6-adapter http-interop/http-factory-guzzle
@@ -27,7 +29,6 @@ We use [HTTP discovery](https://github.com/http-interop/http-factory-discovery) 
 [HTTP factory](https://packagist.org/providers/psr/http-factory-implementation) implementations,
 so Guzzle can be swapped with any other
 [PSR-17](https://www.php-fig.org/psr/psr-17/)/[PSR-18](https://www.php-fig.org/psr/psr-18/)-compatible library.
-
 
 ## Configuring the client
 
