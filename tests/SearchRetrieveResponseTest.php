@@ -93,12 +93,11 @@ class SearchRetrieveResponseTest extends TestCase
         $this->assertEquals('Record 1', $res->records[0]->data);
     }
 
-    /**
-     * @expectedException         Scriptotek\Sru\Exceptions\SruErrorException
-     * @expectedExceptionMessage  Unknown schema for retrieval (Invalid parameter: 'marcxml' for service: 'biblio')
-     */
     public function testErrorWithDetails()
     {
+        $this->expectException(\Scriptotek\Sru\Exceptions\SruErrorException::class);
+        $this->expectExceptionMessage("Unknown schema for retrieval (Invalid parameter: 'marcxml' for service: 'biblio'");
+
         $res = new SearchRetrieveResponse('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
           <srw:version>1.1</srw:version>
           <srw:numberOfRecords>0</srw:numberOfRecords>
@@ -111,12 +110,11 @@ class SearchRetrieveResponseTest extends TestCase
         </srw:searchRetrieveResponse>');
     }
 
-    /**
-     * @expectedException         Scriptotek\Sru\Exceptions\SruErrorException
-     * @expectedExceptionMessage  General system error
-     */
     public function testErrorWithoutDetails()
     {
+        $this->expectException(\Scriptotek\Sru\Exceptions\SruErrorException::class);
+        $this->expectExceptionMessage("General system error");
+
         $res = new SearchRetrieveResponse('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
           <srw:version>1.1</srw:version>
           <srw:numberOfRecords>0</srw:numberOfRecords>
@@ -128,12 +126,11 @@ class SearchRetrieveResponseTest extends TestCase
         </srw:searchRetrieveResponse>');
     }
 
-    /**
-     * @expectedException         Scriptotek\Sru\Exceptions\SruErrorException
-     * @expectedExceptionMessage  Too many boolean operators, the maximum is 10. Please try a less complex query. (10)
-     */
     public function testErrorWithCustomMessage()
     {
+        $this->expectException(\Scriptotek\Sru\Exceptions\SruErrorException::class);
+        $this->expectExceptionMessage("Too many boolean operators, the maximum is 10. Please try a less complex query. (10)");
+
         $res = new SearchRetrieveResponse('<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
           <srw:version>1.1</srw:version>
           <srw:numberOfRecords>0</srw:numberOfRecords>
@@ -156,6 +153,7 @@ class SearchRetrieveResponseTest extends TestCase
           <srw:diagnostics xmlns="http://www.loc.gov/zing/srw/diagnostic/">
           </srw:diagnostics>
         </srw:searchRetrieveResponse>');
+        $this->assertCount(0,  $res->records);
     }
 
     public function testCanBeInitializedWithoutAnyData()

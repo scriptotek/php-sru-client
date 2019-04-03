@@ -32,9 +32,6 @@ class RecordsTest extends TestCase
         $this->assertEquals($n, $i);
     }
 
-    /**
-     * @expectedException Scriptotek\Sru\Exceptions\InvalidResponseException
-     */
     public function testRepeatSameResponse()
     {
         // Result set contains two records
@@ -51,9 +48,9 @@ class RecordsTest extends TestCase
         // Jumping to position 2 should call fetchMore() and throw
         // an InvalidResponseException on getting the same response
         // as we got for position 1
+        $this->expectException(\Scriptotek\Sru\Exceptions\InvalidResponseException::class);
         $rec->next();
     }
-    
 
     public function testMultipleRequests()
     {

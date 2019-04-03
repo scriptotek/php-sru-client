@@ -4,7 +4,7 @@ use GuzzleHttp\Psr7\Response as HttpResponse;
 use function GuzzleHttp\Psr7\stream_for;
 use Http\Mock\Client as MockHttp;
 
-class TestCase extends \PHPUnit_Framework_TestCase
+class TestCase extends \PHPUnit\Framework\TestCase
 {
     protected $recordTpl = '<srw:record>
             <srw:recordSchema>marcxchange</srw:recordSchema>
