@@ -16,23 +16,18 @@ the [php-sru-search](https://github.com/Zeitschriftendatenbank/php-sru-search) p
 
 ## Install using Composer
 
-Make sure you have [Composer](https://getcomposer.org) installed, then run
+Use [Composer](https://getcomposer.org) to install sru-client with a compatible HTTP library such as Guzzle:
 
 ```bash
-composer require scriptotek/sru-client
+composer require scriptotek/sru-client php-http/guzzle6-adapter http-interop/http-factory-guzzle
 ```
 
-in your project directory to get the latest stable version of the package.
+We use [HTTP discovery](https://github.com/http-interop/http-factory-discovery) to discover
+[HTTP client](https://packagist.org/providers/psr/http-client-implementation) and
+[HTTP factory](https://packagist.org/providers/psr/http-factory-implementation) implementations,
+so Guzzle can be swapped with any other
+[PSR-17](https://www.php-fig.org/psr/psr-17/)/[PSR-18](https://www.php-fig.org/psr/psr-18/)-compatible library.
 
-**You also need a HTTP library**. If you're not already using one in your project,
-just add Guzzle:
-
-```bash
-composer require php-http/guzzle6-adapter
-```
-
-[HTTPlug discovery](http://php-http.readthedocs.io/en/latest/discovery.html) is
-used in order to not depend on a specific library.
 
 ## Configuring the client
 

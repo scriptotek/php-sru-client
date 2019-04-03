@@ -2,24 +2,25 @@
 
 use Http\Client\Common\Plugin\AuthenticationPlugin;
 use Http\Client\Common\PluginClient;
-use Http\Client\HttpClient;
-use Http\Discovery\HttpClientDiscovery;
 use Http\Client\Common\Exception\ServerErrorException;
-use Http\Client\Common\Plugin\ErrorPlugin;
-use Http\Discovery\MessageFactoryDiscovery;
+use Http\Factory\Discovery\HttpClient;
+use Http\Factory\Discovery\HttpFactory;
 use Http\Message\Authentication\BasicAuth;
-use Http\Message\MessageFactory;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 
 /**
  * SRU client
  */
 class Client
 {
-    /** @var HttpClient */
+    /** @var ClientInterface */
     protected $httpClient;
 
-    /** @var MessageFactory */
-    protected $messageFactory;
+    /**
+     * @var RequestFactoryInterface
+     */
+    private $requestFactory;
 
     /** @var string SRU service base URL */
     protected $url;
@@ -52,17 +53,17 @@ class Client
     /**
      * Create a new client
      *
-     * @param string              $url     Base URL to the SRU service
-     * @param array               $options Associative array of options
-     * @param HttpClient          $httpClient
-     * @param MessageFactory|null $messageFactory
+     * @param string                  $url             Base URL to the SRU service
+     * @param array                   $options         Associative array of options
+     * @param ClientInterface         $httpClient
+     * @param RequestFactoryInterface $requestFactory
      * @throws \ErrorException
      */
     public function __construct(
         $url,
         $options = null,
-        HttpClient $httpClient = null,
-        MessageFactory $messageFactory = null
+        ClientInterface $httpClient = null,
+        RequestFactoryInterface $requestFactory = null
     ) {
         $this->url = $url;
         $options = $options ?: array();
@@ -95,8 +96,8 @@ class Client
             throw new\ErrorException('Not supported');
         }
 
-        $this->httpClient = new PluginClient($httpClient ?: HttpClientDiscovery::find(), $plugins);
-        $this->messageFactory = $messageFactory ?: MessageFactoryDiscovery::find();
+        $this->httpClient = new PluginClient($httpClient ?: HttpClient::client(), $plugins);
+        $this->requestFactory = $requestFactory ?: HttpFactory::requestFactory();
     }
 
     /**
@@ -212,7 +213,7 @@ class Client
      */
     public function request($method, $url)
     {
-        $request = $this->messageFactory->createRequest($method, $url, $this->headers);
+        $request = $this->requestFactory->createRequest($method, $url, $this->headers);
         $response = $this->httpClient->sendRequest($request);
 
         if ($response->getStatusCode() >= 500 && $response->getStatusCode() < 600) {
