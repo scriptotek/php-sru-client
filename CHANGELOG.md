@@ -42,10 +42,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replace hard dependency on Guzzle with HTTPlug client discovery.
   To continue use Guzzle, run `composer require php-http/guzzle6-adapter`
 
-[Unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.7.0...HEAD
-[0.7.0]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.6.4...v0.7.0
-[0.6.4]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.6.3...v0.6.4
-[0.6.3]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.6.2...v0.6.3
-[0.6.2]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.6.1...v0.6.2
-[0.6.1]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.6.0...v0.6.1
-[0.6.0]: https://github.com/olivierlacan/keep-a-changelog/releases/tag/v0.6.0
+[Unreleased]: https://github.com/scriptotek/php-sru-client/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/scriptotek/php-sru-client/compare/v0.6.4...v0.7.0
+[0.6.4]: https://github.com/scriptotek/php-sru-client/compare/v0.6.3...v0.6.4
+[0.6.3]: https://github.com/scriptotek/php-sru-client/compare/v0.6.2...v0.6.3
+[0.6.2]: https://github.com/scriptotek/php-sru-client/compare/v0.6.1...v0.6.2
+[0.6.1]: https://github.com/scriptotek/php-sru-client/compare/v0.6.0...v0.6.1
+[0.6.0]: https://github.com/scriptotek/php-sru-client/releases/tag/v0.6.0
