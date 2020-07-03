@@ -91,7 +91,7 @@ foreach ($urls as $url) {
 
     try {
         $response = $sru->explain();
-    } catch (\Scriptotek\Sru\Exceptions\SruErrorException $e)
+    } catch (\Scriptotek\Sru\Exceptions\SruErrorException $e) {
         print 'ERROR: ' . $e->getMessage() . "\n";
         continue;
     }
