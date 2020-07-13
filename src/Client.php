@@ -147,7 +147,7 @@ class Client
         $url = $this->urlTo($cql, $start, $count, $extraParams);
         $body = $this->request('GET', $url);
 
-        return new SearchRetrieveResponse($body, $this);
+        return new SearchRetrieveResponse($body, $this, $url);
     }
 
     /**
@@ -203,7 +203,7 @@ class Client
 
         $body = $this->request('GET', $url);
 
-        return new ExplainResponse($body, $this);
+        return new ExplainResponse($body, $this, $url);
     }
 
     /**

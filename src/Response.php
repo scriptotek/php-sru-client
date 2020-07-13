@@ -116,17 +116,18 @@ class Response implements ResponseInterface
      *
      * @param string $text Raw XML response
      * @param Client $client SRU client reference (optional)
+     * @param string $url Request URL
      */
-    public function __construct($text = null, &$client = null)
+    public function __construct($text = null, &$client = null, $url = null)
     {
         $this->client = $client;
 
         if (!is_null($text)) {
-            $this->initializeFromText($text);
+            $this->initializeFromText($text, $url);
         }
     }
 
-    protected function initializeFromText($text)
+    protected function initializeFromText($text, $url)
     {
         // Fix missing namespace in Alma records:
         $text = str_replace('<record xmlns="">', '<record xmlns="http://www.loc.gov/MARC21/slim">', $text);
@@ -138,10 +139,10 @@ class Response implements ResponseInterface
 
         $this->version = $this->response->text('/srw:*/srw:version');
 
-        $this->handleDiagnostic($this->response->first('/srw:*/srw:diagnostics/d:diagnostic'));
+        $this->handleDiagnostic($url, $this->response->first('/srw:*/srw:diagnostics/d:diagnostic'));
     }
 
-    protected function handleDiagnostic(QuiteSimpleXMLElement $node = null)
+    protected function handleDiagnostic($url, QuiteSimpleXMLElement $node = null)
     {
         if (is_null($node)) {
             return;
@@ -162,7 +163,7 @@ class Response implements ResponseInterface
             if (!empty($details)) {
                 $msg .= ' (' . $details . ')';
             }
-            throw new Exceptions\SruErrorException($msg, $uri);
+            throw new Exceptions\SruErrorException($msg, $uri, $url);
         }
     }
 

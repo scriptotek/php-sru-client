@@ -24,10 +24,11 @@ class ExplainResponse extends Response implements ResponseInterface
      *
      * @param string $text Raw XML response
      * @param Client $client SRU client reference (optional)
+     * @param string $url Request URL
      */
-    public function __construct($text = null, &$client = null)
+    public function __construct($text = null, &$client = null, $url = null)
     {
-        parent::__construct($text, $client);
+        parent::__construct($text, $client, $url);
 
         $this->indexes = array();
 
