@@ -1,4 +1,6 @@
-<?php namespace Scriptotek\Sru;
+<?php
+
+namespace Scriptotek\Sru;
 
 /**
  * Interface defining data objects that hold the information of an SRU response

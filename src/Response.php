@@ -1,4 +1,6 @@
-<?php namespace Scriptotek\Sru;
+<?php
+
+namespace Scriptotek\Sru;
 
 use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
 

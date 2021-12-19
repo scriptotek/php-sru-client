@@ -1,4 +1,6 @@
-<?php namespace Scriptotek\Sru;
+<?php
+
+namespace Scriptotek\Sru;
 
 use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
 
@@ -51,13 +53,13 @@ class ExplainResponse extends Response implements ResponseInterface
 
         $this->host = $serverInfo->text('exp:host');
         $this->port = (int) $serverInfo->text('exp:port');
-        $this->database = new \StdClass;
+        $this->database = new \StdClass();
         $this->database->identifier = $serverInfo->text('exp:database');
         $this->database->title = $dbInfo->text('exp:title');
         $this->database->description = $dbInfo->text('exp:description');
 
         foreach ($indexInfo->xpath('exp:index') as $index) {
-            $ind = new \StdClass;
+            $ind = new \StdClass();
             $ind->scan = ($index->attr('scan') == 'true');
             $ind->search = ($index->attr('search') == 'true');
             $ind->sort = ($index->attr('sort') == 'true');

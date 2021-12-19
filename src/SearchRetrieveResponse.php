@@ -1,4 +1,6 @@
-<?php namespace Scriptotek\Sru;
+<?php
+
+namespace Scriptotek\Sru;
 
 /**
  * SearchRetrieve response, containing a list of records or some error

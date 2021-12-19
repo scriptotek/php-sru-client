@@ -1,4 +1,6 @@
-<?php namespace Scriptotek\Sru;
+<?php
+
+namespace Scriptotek\Sru;
 
 use Http\Client\Common\Plugin\AuthenticationPlugin;
 use Http\Client\Common\PluginClient;

@@ -1,8 +1,10 @@
-<?php namespace Scriptotek\Sru\Exceptions;
+<?php
+
+namespace Scriptotek\Sru\Exceptions;
 
 class SruErrorException extends \Exception
 {
-	public $uri;
+    public $uri;
     public $requestUrl;
 
     /**

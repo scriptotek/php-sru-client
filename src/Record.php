@@ -1,4 +1,6 @@
-<?php namespace Scriptotek\Sru;
+<?php
+
+namespace Scriptotek\Sru;
 
 use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
 
@@ -19,7 +21,7 @@ class Record
     /** @var ?QuiteSimpleXMLElement */
     public ?QuiteSimpleXMLElement $data;
 
-    static public string $recordTpl = '<s:record xmlns:s="http://www.loc.gov/zing/srw/">
+    public static string $recordTpl = '<s:record xmlns:s="http://www.loc.gov/zing/srw/">
             <s:recordSchema>{{recordSchema}}</s:recordSchema>
             <s:recordPacking>{{recordPacking}}</s:recordPacking>
             <s:recordPosition>{{position}}</s:recordPosition>
@@ -50,8 +52,7 @@ class Record
         string|QuiteSimpleXMLElement $data,
         string $recordSchema='marcxchange',
         string $recordPacking='xml'
-    ): Record
-    {
+    ): Record {
         $record = str_replace(
             array('{{position}}', '{{data}}', '{{recordSchema}}', '{{recordPacking}}'),
             array($position, $data, $recordSchema, $recordPacking),

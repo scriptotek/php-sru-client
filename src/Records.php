@@ -1,4 +1,6 @@
-<?php namespace Scriptotek\Sru;
+<?php
+
+namespace Scriptotek\Sru;
 
 /**
  * When iterating, methods are called in the following order:
@@ -64,7 +66,8 @@ class Records implements \Iterator
         $this->data = $this->lastResponse->records;
 
         if (count($this->data) != 0 && $this->data[0]->position != $this->position) {
-            throw new Exceptions\InvalidResponseException('Wrong index of first record in result set. '
+            throw new Exceptions\InvalidResponseException(
+                'Wrong index of first record in result set. '
                 . 'Expected: ' .$this->position . ', got: ' . $this->data[0]->position
             );
         }
