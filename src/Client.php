@@ -53,34 +53,28 @@ class Client
     /**
      * Create a new client
      *
-     * @param string                  $url             Base URL to the SRU service
-     * @param array                   $options         Associative array of options
-     * @param ClientInterface         $httpClient
-     * @param RequestFactoryInterface $requestFactory
+     * @param string                   $url             Base URL to the SRU service
+     * @param ?array                   $options         Associative array of options
+     * @param ?ClientInterface         $httpClient
+     * @param ?RequestFactoryInterface $requestFactory
      * @throws \ErrorException
      */
     public function __construct(
-        $url,
-        $options = null,
+        string $url,
+        ?array $options = null,
         ClientInterface $httpClient = null,
         RequestFactoryInterface $requestFactory = null
     ) {
         $this->url = $url;
-        $options = $options ?: array();
+        $options = $options ?: [];
 
         $plugins = [];
 
-        $this->schema = isset($options['schema'])
-            ? $options['schema']
-            : 'marcxml';
+        $this->schema = $options['schema'] ?? 'marcxml';
 
-        $this->version = isset($options['version'])
-            ? $options['version']
-            : '1.1';
+        $this->version = $options['version'] ?? '1.1';
 
-        $this->headers = isset($options['headers'])
-            ? $options['headers']
-            : ['Accept' => 'application/xml'];
+        $this->headers = $options['headers'] ?? ['Accept' => 'application/xml'];
 
         if (isset($options['user-agent'])) {
             // legacy option
@@ -93,7 +87,7 @@ class Client
         }
 
         if (isset($options['proxy'])) {
-            throw new\ErrorException('Not supported');
+            throw new \ErrorException('Not supported');
         }
 
         $this->httpClient = new PluginClient($httpClient ?: HttpClient::client(), $plugins);
@@ -109,7 +103,7 @@ class Client
      * @param array $extraParams Extra GET parameters
      * @return string
      */
-    public function urlTo($cql, $start = 1, $count = 10, $extraParams = array())
+    public function urlTo(string $cql, int $start = 1, int $count = 10, array $extraParams = []): string
     {
         $qs = array(
             'operation' => 'searchRetrieve',
@@ -135,14 +129,14 @@ class Client
     /**
      * Perform a searchRetrieve request
      *
-     * @deprecated
      * @param string $cql
      * @param int $start Start value in result set (optional)
      * @param int $count Number of records to request (optional)
      * @param array $extraParams Extra GET parameters
      * @return SearchRetrieveResponse
+     *@deprecated
      */
-    public function search($cql, $start = 1, $count = 10, $extraParams = array())
+    public function search(string $cql, int $start = 1, int $count = 10, array $extraParams = []): SearchRetrieveResponse
     {
         $url = $this->urlTo($cql, $start, $count, $extraParams);
         $body = $this->request('GET', $url);
@@ -158,20 +152,20 @@ class Client
      * @param array $extraParams Extra GET parameters
      * @return Records
      */
-    public function all($cql, $batchSize = 10, $extraParams = array())
+    public function all(string $cql, int $batchSize = 10, array $extraParams = []): Records
     {
         return new Records($cql, $this, $batchSize, $extraParams);
     }
 
     /**
      * Alias for `all()`
-     * @deprecated
-     * @param $cql
+     * @param string $cql
      * @param int $batchSize
      * @param array $extraParams
      * @return Records
+     *@deprecated
      */
-    public function records($cql, $batchSize = 10, $extraParams = array())
+    public function records(string $cql, int $batchSize = 10, array $extraParams = []): Records
     {
         return $this->all($cql, $batchSize, $extraParams);
     }
@@ -181,9 +175,9 @@ class Client
      *
      * @param string $cql
      * @param array $extraParams Extra GET parameters
-     * @return Record
+     * @return ?Record
      */
-    public function first($cql, $extraParams = array())
+    public function first(string $cql, array $extraParams = []): ?Record
     {
         $recs = new Records($cql, $this, 1, $extraParams);
         return $recs->numberOfRecords() ? $recs->current() : null;
@@ -194,7 +188,7 @@ class Client
      *
      * @return ExplainResponse
      */
-    public function explain()
+    public function explain(): ExplainResponse
     {
         $url = $this->url . '?' . http_build_query(array(
             'operation' => 'explain',
@@ -211,7 +205,7 @@ class Client
      * @param string $url
      * @return string
      */
-    public function request($method, $url)
+    public function request(string $method, string $url): string
     {
         $request = $this->requestFactory->createRequest($method, $url, $this->headers);
         $response = $this->httpClient->sendRequest($request);

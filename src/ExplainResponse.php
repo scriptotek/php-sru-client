@@ -7,30 +7,30 @@ use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
  */
 class ExplainResponse extends Response implements ResponseInterface
 {
-    /** @var string Server hostname */
-    public $host;
+    /** @var string|null Server hostname */
+    public ?string $host = null;
 
     /** @var int Server port */
-    public $port;
+    public int $port;
 
     /** @var object Server database */
-    public $database;
+    public object $database;
 
     /** @var array Server indexes */
-    public $indexes;
+    public array $indexes;
 
     /**
      * Create a new explain response
      *
-     * @param string $text Raw XML response
-     * @param Client $client SRU client reference (optional)
-     * @param string $url Request URL
+     * @param string|null $text Raw XML response
+     * @param Client|null $client SRU client reference (optional)
+     * @param string|null $url
      */
-    public function __construct($text = null, &$client = null, $url = null)
+    public function __construct(string $text = null, Client &$client = null, string $url = null)
     {
         parent::__construct($text, $client, $url);
 
-        $this->indexes = array();
+        $this->indexes = [];
 
         if (is_null($this->response)) {
             return;
@@ -62,7 +62,7 @@ class ExplainResponse extends Response implements ResponseInterface
             $ind->search = ($index->attr('search') == 'true');
             $ind->sort = ($index->attr('sort') == 'true');
             $ind->title = $index->text('exp:title');
-            $ind->maps = array();
+            $ind->maps = [];
             foreach ($index->xpath('exp:map') as $map) {
                 $set = $map->first('exp:name')->attr('set');
                 $name = $map->text('exp:name');

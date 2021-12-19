@@ -18,14 +18,13 @@
  */
 class Records implements \Iterator
 {
-    private $position;
-    private $count;
-    private $extraParams;
-    private $cql;
-    private $client;
-    private $lastResponse;
-
-    private $data = array();
+    private int $position;
+    private int $count;
+    private array $extraParams;
+    private string $cql;
+    private Client $client;
+    private SearchRetrieveResponse $lastResponse;
+    private array $data;
 
     /**
      * Create a new records iterator
@@ -35,9 +34,10 @@ class Records implements \Iterator
      * @param int $count Number of records to request per request
      * @param array $extraParams Extra GET parameters
      */
-    public function __construct($cql, Client $client, $count = 10, $extraParams = array())
+    public function __construct(string $cql, Client $client, int $count = 10, array $extraParams = [])
     {
         $this->position = 1;
+        $this->data = [];
         $this->count = $count; // number of records per request
         $this->extraParams = $extraParams;
         $this->cql = $cql;
@@ -47,10 +47,8 @@ class Records implements \Iterator
 
     /**
      * Return the number of records
-     *
-     * @return int
      */
-    public function numberOfRecords()
+    public function numberOfRecords(): int
     {
         return $this->lastResponse->numberOfRecords;
     }
@@ -58,7 +56,7 @@ class Records implements \Iterator
     /**
      * Fetch more records from the service
      */
-    private function fetchMore()
+    private function fetchMore(): void
     {
         $url = $this->client->urlTo($this->cql, $this->position, $this->count, $this->extraParams);
         $body = $this->client->request('GET', $url);
@@ -74,20 +72,16 @@ class Records implements \Iterator
 
     /**
      * Return the current element
-     *
-     * @return Record
      */
-    public function current()
+    public function current(): Record
     {
         return $this->data[0];
     }
 
     /**
      * Return the key of the current element
-     *
-     * @return int
      */
-    public function key()
+    public function key(): int
     {
         return $this->position;
     }
@@ -95,11 +89,11 @@ class Records implements \Iterator
     /**
      * Rewind the Iterator to the first element
      */
-    public function rewind()
+    public function rewind(): void
     {
         if ($this->position != 1) {
             $this->position = 1;
-            $this->data = array();
+            $this->data = [];
             $this->fetchMore();
         }
     }
@@ -107,7 +101,7 @@ class Records implements \Iterator
     /**
      * Move forward to next element
      */
-    public function next()
+    public function next(): void
     {
         if (count($this->data) > 0) {
             array_shift($this->data);
@@ -121,18 +115,12 @@ class Records implements \Iterator
         if (count($this->data) == 0) {
             $this->fetchMore();
         }
-
-        if (count($this->data) == 0) {
-            return;
-        }
     }
 
     /**
      * Check if current position is valid
-     *
-     * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         return count($this->data) != 0;
     }

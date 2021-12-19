@@ -7,14 +7,14 @@ use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
  */
 class Response implements ResponseInterface
 {
-    public static $nsPrefixes = array(
+    public static array $nsPrefixes = array(
         'srw' => 'http://www.loc.gov/zing/srw/',
         'exp' => 'http://explain.z3950.org/dtd/2.0/',
         'd' => 'http://www.loc.gov/zing/srw/diagnostic/',
         'marc' => 'http://www.loc.gov/MARC21/slim',
     );
 
-    public static $errorMessages = array(
+    public static array $errorMessages = array(
         'info:srw/diagnostic/1/1' => 'General system error',
         'info:srw/diagnostic/1/2' => 'System temporarily unavailable',
         'info:srw/diagnostic/1/3' => 'Authentication error',
@@ -100,25 +100,25 @@ class Response implements ResponseInterface
     );
 
     /** @var string Raw XML response */
-    protected $rawResponse = '';
+    protected string $rawResponse = '';
 
-    /** @var QuiteSimpleXMLElement XML response */
-    protected $response;
+    /** @var QuiteSimpleXMLElement|null XML response */
+    protected ?QuiteSimpleXMLElement $response = null;
 
-    /** @var Client Reference to SRU client object */
-    protected $client;
+    /** @var Client|null Reference to SRU client object */
+    protected ?Client $client = null;
 
-    /** @var string SRU protocol version */
-    public $version;
+    /** @var string|null SRU protocol version */
+    public ?string $version = null;
 
     /**
      * Create a new response
      *
-     * @param string $text Raw XML response
-     * @param Client $client SRU client reference (optional)
-     * @param string $url Request URL
+     * @param string|null $text Raw XML response
+     * @param Client|null $client SRU client reference (optional)
+     * @param string|null $url
      */
-    public function __construct($text = null, &$client = null, $url = null)
+    public function __construct(string $text = null, Client &$client = null, string $url = null)
     {
         $this->client = $client;
 
@@ -154,11 +154,7 @@ class Response implements ResponseInterface
             $msg = $node->text('d:message');
             $details = $node->text('d:details');
             if (empty($msg)) {
-                if (isset(self::$errorMessages[$uri])) {
-                    $msg = self::$errorMessages[$uri];
-                } else {
-                    $msg = 'Unknown error';
-                }
+                $msg = self::$errorMessages[$uri] ?? 'Unknown error';
             }
             if (!empty($details)) {
                 $msg .= ' (' . $details . ')';
@@ -172,7 +168,7 @@ class Response implements ResponseInterface
      *
      * @return string
      */
-    public function asXml()
+    public function asXml(): string
     {
         return $this->rawResponse;
     }

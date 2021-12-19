@@ -8,16 +8,16 @@ interface ResponseInterface
     /**
      * Create a new response
      *
-     * @param string $text Raw XML response
-     * @param Client $client SRU client reference (optional)
+     * @param string|null $text Raw XML response
+     * @param Client|null $client SRU client reference (optional)
      * @return void
      */
-    public function __construct($text = null, &$client = null);
+    public function __construct(string $text = null, Client &$client = null);
 
     /**
      * Get the raw xml response
      *
      * @return string
      */
-    public function asXml();
+    public function asXml(): string;
 }

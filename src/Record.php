@@ -8,18 +8,18 @@ use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
 class Record
 {
     /** @var int */
-    public $position;
+    public int $position;
 
     /** @var string */
-    public $packing;
+    public string $packing;
 
     /** @var string */
-    public $schema;
+    public string $schema;
 
-    /** @var QuiteSimpleXMLElement */
-    public $data;
+    /** @var ?QuiteSimpleXMLElement */
+    public ?QuiteSimpleXMLElement $data;
 
-    static public $recordTpl = '<s:record xmlns:s="http://www.loc.gov/zing/srw/">
+    static public string $recordTpl = '<s:record xmlns:s="http://www.loc.gov/zing/srw/">
             <s:recordSchema>{{recordSchema}}</s:recordSchema>
             <s:recordPacking>{{recordPacking}}</s:recordPacking>
             <s:recordPosition>{{position}}</s:recordPosition>
@@ -45,7 +45,12 @@ class Record
      * @param string $recordPacking
      * @return Record
      */
-    public static function make($position, $data, $recordSchema='marcxchange', $recordPacking='xml')
+    public static function make(
+        int $position,
+        string|QuiteSimpleXMLElement $data,
+        string $recordSchema='marcxchange',
+        string $recordPacking='xml'
+    ): Record
     {
         $record = str_replace(
             array('{{position}}', '{{data}}', '{{recordSchema}}', '{{recordPacking}}'),
