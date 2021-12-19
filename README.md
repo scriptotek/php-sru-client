@@ -1,8 +1,6 @@
 
-[![Build Status](http://img.shields.io/travis/scriptotek/php-sru-client/master.svg?style=flat-square)](https://travis-ci.org/scriptotek/php-sru-client)
 [![Coverage](https://img.shields.io/codecov/c/github/scriptotek/php-sru-client/master.svg?style=flat-square)](https://codecov.io/gh/scriptotek/php-sru-client)
 [![Code Quality](http://img.shields.io/scrutinizer/g/scriptotek/php-sru-client/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/scriptotek/php-sru-client/?branch=master)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/aa33625a-f677-4bd8-8bf3-9230153dced8/mini.png)](https://insight.sensiolabs.com/projects/aa33625a-f677-4bd8-8bf3-9230153dced8)
 [![Latest Stable Version](http://img.shields.io/packagist/v/scriptotek/sru-client.svg?style=flat-square)](https://packagist.org/packages/scriptotek/sru-client)
 [![Total Downloads](http://img.shields.io/packagist/dt/scriptotek/sru-client.svg?style=flat-square)](https://packagist.org/packages/scriptotek/sru-client)
 
