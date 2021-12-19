@@ -1,19 +1,16 @@
-<phpunit 
-  colors="true"
-  bootstrap="vendor/autoload.php"
-  verbose="true"
-  stopOnFailure="true">
-
-    <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src</directory>
-        </whitelist>
-    </filter>
-
+<?xml version="1.0"?>
+<phpunit colors="true" bootstrap="vendor/autoload.php" verbose="true" stopOnFailure="true">
     <testsuites>
-    	<testsuite name="TestSuite">
-    		<directory>tests/</directory>
-    	</testsuite>
+        <testsuite name="unit">
+            <directory>tests/</directory>
+        </testsuite>
     </testsuites>
-
+    <coverage ignoreDeprecatedCodeUnits="true">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <report>
+            <clover outputFile="clover.xml" />
+        </report>
+    </coverage>
 </phpunit>
