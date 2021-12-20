@@ -106,15 +106,6 @@ foreach ($urls as $url) {
 }
 ```
 
-## API documentation
-
-API documentation can be generated using e.g. [Sami](https://github.com/fabpot/sami),
-which is included in the dev requirements of `composer.json`.
-
-    php vendor/bin/sami.php update sami.config.php -v
-
-You can view it at [scriptotek.github.io/php-sru-client](//scriptotek.github.io/php-sru-client/)
-
 ## Laravel 5 integration
 
 Add the service provider to the `'providers'` array in `config/app.php`:
