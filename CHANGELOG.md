@@ -8,7 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 (nothing yet)
 
-## [0.7.1] - 2020-07-13
+## [0.7.2](https://github.com/scriptotek/php-sru-client/compare/v0.7.1...v0.7.2) - 2021-12-21
+
+- PHP version: minimum PHP 8.0
+
+## [0.7.1](https://github.com/scriptotek/php-sru-client/compare/v0.7.0...v0.7.1) - 2020-07-13
 
 ### Changed
 
@@ -22,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove support for PHP 5.6 and 7.0 because we updated the tests to work with PHPUnit 7+
   and can no longer run tests on PHP < 7.1. Also, PHP 5.6 and PHP 7.0 have now reached end-of-life.
+
+- Github: switched to [tag releases](https://github.com/scriptotek/php-sru-client/tags)
 
 ## [0.6.4] - 2019-03-06
 ### Fixed
