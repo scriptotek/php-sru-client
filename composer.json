@@ -5,6 +5,7 @@
     "homepage": "http://github.com/scriptotek/sru-client",
     "keywords": ["sru"],
     "require": {
+        "php" : "^8.0",
         "danmichaelo/quitesimplexmlelement": "^1.0",
         "psr/http-client-implementation": "^1.0",
         "psr/http-factory-implementation": "^1.0",
