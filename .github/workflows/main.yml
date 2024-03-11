@@ -18,8 +18,5 @@ jobs:
     - uses: php-actions/composer@v6
       with:
         php_version: ${{ matrix.php_version }}
-    - uses: php-actions/phpunit@v3
-      with:
-        php_version: ${{ matrix.php_version }}
-        php_extensions: pcov
+    - run: composer test
     - run: bash <(curl -s https://codecov.io/bash)
