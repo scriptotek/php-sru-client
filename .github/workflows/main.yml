@@ -14,9 +14,16 @@ jobs:
           - "8.2"
           - "8.3"
     steps:
-    - uses: actions/checkout@v2
-    - uses: php-actions/composer@v6
+    - uses: actions/checkout@v4
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
       with:
-        php_version: ${{ matrix.php_version }}
+        php-version: ${{ matrix.php_version }}
+        coverage: none
+        tools: composer:v2
+
+    - run: composer install
+
     - run: composer test
+
     - run: bash <(curl -s https://codecov.io/bash)
